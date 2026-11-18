@@ -58,7 +58,7 @@ function renderAccount() {
   const head = `<div class="hubcard hubhead"><svg class="hubdeco" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="88"/><circle cx="100" cy="100" r="62"/><circle cx="100" cy="100" r="36"/></svg><button type="button" class="hublogout" data-hub-logout>Log out</button>
     <div class="hubavatar" aria-hidden="true">${acctEsc(hubName()[0].toUpperCase())}</div>
     <div class="hubwho"><div class="hubname"><span>${acctEsc(hubName())}</span><button type="button" class="hubedit" data-name-edit aria-expanded="false">${P.username ? "Edit name" : "Set your name"}</button></div>
-      <div class="hubkick">Your Infrared Dashboard</div>
+      <div class="hubkick">Infrared Dashboard</div>
       <form class="hubuser" data-f="username" hidden><label for="h_user" class="sr">Name</label><input id="h_user" type="text" maxlength="30" placeholder="What should we call you?" value="${acctEsc(P.username || "")}" autocomplete="nickname" spellcheck="false"><button class="btn" type="submit">Save</button><button class="tbtn" type="button" data-name-cancel>Cancel</button><span class="hubmsg" role="status"></span></form></div>
 </div>`;
 
@@ -159,7 +159,7 @@ function renderAccount() {
   // The tab comes from the address (#account/news), so links, reloads and the back button all land on the right tab
   HUB_TAB = Math.max(0, TABS.map((t) => slugOf(t[0])).indexOf((location.hash.split("/")[1] || "").toLowerCase()));
   WANT_TAB = "";
-  main.innerHTML = `<p class="crumb"><a href="#home">Home</a> / Profile</p>${legacy}${head}
+  main.innerHTML = `<div class="hubtop"><p class="crumb"><a href="#home">Home</a> / Profile</p><button type="button" class="hublogout2" data-hub-logout>Log out</button></div>${legacy}${head}
   <div class="pathanchor"></div><div class="pathwrap"><div class="path hubtabs" role="tablist">${TABS.map((t, i) => `<button role="tab" aria-selected="${i === HUB_TAB}" data-hubtab="${i}">${t[0]}</button>`).join("")}</div></div>
   <div class="panel hubpanel" role="tabpanel"><div class="hubgrid">${TABS[HUB_TAB][1]()}</div></div>`;
   main.querySelectorAll("[data-hubtab]").forEach(
@@ -173,6 +173,8 @@ function renderAccount() {
         if (keep && typeof toTabs === "function") toTabs();
       }),
   );
+  // Swipe between profile tabs like the specialty pages: the next tab slides in as you drag
+  TABPEEK = (k) => (TABS[k] ? `<div class="hubgrid">${TABS[k][1]()}</div>` : "");
   const selTab = main.querySelector('.hubtabs [aria-selected="true"]');
   if (selTab) selTab.parentNode.scrollLeft = Math.max(0, selTab.offsetLeft - 24); // keep the open tab in view on phones
   main.querySelectorAll("[data-gotab]").forEach(
@@ -185,8 +187,7 @@ function renderAccount() {
   );
   wireSettings(main);
   if (main.querySelector(".prepintab")) wirePrep(prepState());
-  const lo = main.querySelector("[data-hub-logout]");
-  if (lo) lo.onclick = () => acctLogout();
+  main.querySelectorAll("[data-hub-logout]").forEach((lo) => (lo.onclick = () => acctLogout()));
   wireHub();
   if (typeof addSiteFoot === "function") addSiteFoot();
 }

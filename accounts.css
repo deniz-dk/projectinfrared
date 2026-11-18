@@ -428,3 +428,10 @@ input:autofill{background:var(--bg)!important;color:var(--ink)!important}
 /* Residency tab: both columns start level */
 .hubprepfull .prepgrid{align-items:start}
 .hubprepfull .prepgrid>.prepcol>:first-child{margin-top:0}
+
+.hubtop{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.hublogout2{display:none;border:0;background:0 0;padding:4px 0;font:600 .9rem var(--sans);color:var(--scrub);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+@media (max-width:760px){.hubhead .hublogout{display:none}.hublogout2{display:inline-block}}
+.hubprepfull,.prepintab,.prepintab .prepgrid,.prepintab .prepcol{min-width:0;max-width:100%}
+.hubgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:760px){.hubgrid{grid-template-columns:minmax(0,1fr)}}
