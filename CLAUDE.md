@@ -14,6 +14,8 @@ The site at projectinfrared.org is built by Netlify from `main`. A push to `main
 ## Weekly news
 Every Saturday at 2:35 a.m. Toronto time, a scheduled task publishes the week's news through the `news-publish` Supabase function. When news shows that site data is out of date, it opens a pull request here (branch `news-YYYY-MM-DD`) with the fix. The run messages Nali a plain-English rundown, and she approves by replying "approve" in that run's chat. The run then merges it. Never ask her to use GitHub herself. On merge, `.github/workflows/page-notes.yml` posts the notes found between `<!--notes-->` and `<!--/notes-->` in the PR description, using the repo secret NEWS_SECRET.
 
+Trends: when several stories over a few weeks point the same way (more privatization in a subspecialty, a new opportunity type, shrinking job markets), the run publishes one news item with kind `trend`. It cites the strongest source, and its summary says what's moving and what backs it up. Not every week, and only when the evidence is real.
+
 ## Common requests from Nali
 - **"Run the news" / "news check":** start the scheduled task "Project Infrared news check" now (list the scheduled tasks to find it, then fire it). It searches, publishes and opens a pull request for page fixes. If scheduled tasks aren't available, do the same steps by hand: the task's instructions are its prompt.
 - **"Push it live" / "merge it":** review the open `news-*` pull request, then merge it with the REST API: `gh api -X PUT repos/deniz-dk/projectinfrared/pulls/<n>/merge -f merge_method=squash`. GraphQL commands like `gh pr create`, `gh pr list` and `gh pr merge` are blocked here; use `gh api repos/deniz-dk/projectinfrared/pulls…` instead.
