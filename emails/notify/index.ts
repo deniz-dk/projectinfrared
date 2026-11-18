@@ -192,10 +192,12 @@ body,.x-bg{background:${C.bg}!important}
 const sum1 = (t: string, n = 150) => (t.length > n ? t.slice(0, t.lastIndexOf(" ", n)).replace(/[,;:]$/, "") + "…" : t);
 function storyHtml(x: News, tag?: string) {
   const [kl, kc] = KIND[x.kind] || KIND.news;
-  return `<tr><td class="x-line" style="padding:12px 0;border-top:1px solid ${C.line}">
+  // A small thumbnail on the right when the article has its own image; the text keeps most of the width
+  const thumb = x.image ? `<td width="64" valign="top" style="padding-left:12px;padding-top:2px"><a href="${esc(x.url)}"><img src="${esc(x.image)}" width="64" height="64" alt="" style="display:block;width:64px;height:64px;object-fit:cover;border-radius:8px;border:0"></a></td>` : "";
+  return `<tr><td class="x-line" style="padding:12px 0;border-top:1px solid ${C.line}"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td valign="top">
 <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:${kc}">${kl}<span class="x-dim" style="color:${C.dim};font-weight:600;letter-spacing:.3px;text-transform:none"> · ${esc(shortDate(x.published))} · ${esc(x.source)}${tag ? ` · ${esc(tag)}` : ""}</span></p>
 <a href="${esc(x.url)}" class="x-ink" style="font-size:15px;line-height:1.35;font-weight:700;color:${C.ink};text-decoration:none">${esc(x.title)}</a>
-<p class="x-mute" style="margin:4px 0 0;font-size:14px;line-height:1.5;color:${C.mute}">${esc(sum1(x.summary))}</p></td></tr>`;
+<p class="x-mute" style="margin:4px 0 0;font-size:14px;line-height:1.5;color:${C.mute}">${esc(sum1(x.summary))}</p></td>${thumb}</tr></table></td></tr>`;
 }
 function changesHtml(list: Upd[], label = "Changed on our page") {
   if (!list.length) return "";
