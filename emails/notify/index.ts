@@ -163,50 +163,70 @@ async function weekData() {
 // specialty, or the parent specialty of a starred subspecialty.
 const touches = (specs: string[], f: string) => specs.some((s) => s === f || baseOf(s) === f || s === baseOf(f));
 
-const C = { bg: "#050506", card: "#0f0f12", line: "#24242a", ink: "#f1f1f3", mute: "#a9abb2", dim: "#7c7e86", red: "#ff4a5c", brand: "#c8102e" };
+// Site colours. Light is the default; the <style> block switches to the site's dark theme when the
+// reader's device is in dark mode. Classes carry the colours so dark mode can override them.
+const C = { bg: "#f4f4f5", card: "#ffffff", line: "#dddde1", ink: "#141416", mute: "#5e6168", dim: "#8a8d94", red: "#c8102e", soft: "#f6f6f8" };
 const F = "font-family:'Public Sans',Helvetica,Arial,sans-serif";
 const NARROW = "font-family:'Archivo Narrow','Arial Narrow',Arial,sans-serif;font-weight:800;text-transform:uppercase";
+const STYLE = `<style>
+:root{color-scheme:light dark;supported-color-schemes:light dark}
+body,.x-bg{background:${C.bg}!important}
+@media (prefers-color-scheme:dark){
+  body,.x-bg{background:#0b0b0d!important}
+  .x-card{background:#141416!important;border-color:#26262b!important}
+  .x-soft{background:#1b1b1f!important;border-color:#26262b!important}
+  .x-ink{color:#ececef!important}
+  .x-mute{color:#a9abb2!important}
+  .x-dim{color:#7c7e86!important}
+  .x-line{border-color:#26262b!important}
+  .x-red{color:#ff4a5c!important}
+  .x-btn2{background:#1b1b1f!important;color:#ececef!important;border-color:#33333a!important}
+}
+[data-ogsc] .x-card{background:#141416!important;border-color:#26262b!important}
+[data-ogsc] .x-soft{background:#1b1b1f!important}
+[data-ogsc] .x-ink{color:#ececef!important}
+[data-ogsc] .x-mute{color:#a9abb2!important}
+@media (max-width:480px){.x-pad{padding-left:18px!important;padding-right:18px!important}.x-h1{font-size:28px!important}}
+</style>`;
 
+const sum1 = (t: string, n = 150) => (t.length > n ? t.slice(0, t.lastIndexOf(" ", n)).replace(/[,;:]$/, "") + "…" : t);
 function storyHtml(x: News, tag?: string) {
   const [kl, kc] = KIND[x.kind] || KIND.news;
-  const img = x.image ? `<td width="104" valign="top" style="padding-right:14px"><a href="${esc(x.url)}"><img src="${esc(x.image)}" width="104" height="74" alt="" style="display:block;width:104px;height:74px;object-fit:cover;border-radius:8px;border:1px solid ${C.line}"></a></td>` : "";
-  return `<tr><td style="padding:14px 0;border-top:1px solid ${C.line}"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${img}<td valign="top">
-<p style="margin:0 0 5px;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:${kc}">${kl}<span style="color:${C.dim};font-weight:600;letter-spacing:.4px;text-transform:none"> · ${esc(shortDate(x.published))} · ${esc(x.source)}${tag ? ` · ${esc(tag)}` : ""}</span></p>
-<a href="${esc(x.url)}" style="font-size:16px;line-height:1.3;font-weight:700;color:${C.ink};text-decoration:none">${esc(x.title)}</a>
-<p style="margin:5px 0 0;font-size:14px;line-height:1.5;color:${C.mute}">${esc(x.summary)}</p></td></tr></table></td></tr>`;
+  return `<tr><td class="x-line" style="padding:12px 0;border-top:1px solid ${C.line}">
+<p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:${kc}">${kl}<span class="x-dim" style="color:${C.dim};font-weight:600;letter-spacing:.3px;text-transform:none"> · ${esc(shortDate(x.published))} · ${esc(x.source)}${tag ? ` · ${esc(tag)}` : ""}</span></p>
+<a href="${esc(x.url)}" class="x-ink" style="font-size:15px;line-height:1.35;font-weight:700;color:${C.ink};text-decoration:none">${esc(x.title)}</a>
+<p class="x-mute" style="margin:4px 0 0;font-size:14px;line-height:1.5;color:${C.mute}">${esc(sum1(x.summary))}</p></td></tr>`;
 }
-function changesHtml(list: Upd[]) {
+function changesHtml(list: Upd[], label = "Changed on our page") {
   if (!list.length) return "";
-  return `<tr><td style="padding:12px 14px;background:#16161a;border:1px solid ${C.line};border-radius:10px">
-<p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:${C.dim}">Changed on our page</p>
-${list.map((c) => `<p style="margin:0 0 6px;font-size:14px;line-height:1.5;color:${C.mute}"><b style="color:${C.ink}">${esc(c.title)}.</b> ${esc(c.body)}</p>`).join("")}</td></tr><tr><td style="height:6px"></td></tr>`;
+  return `<tr><td style="padding:2px 0 10px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="x-soft" style="padding:12px 14px;background:${C.soft};border:1px solid ${C.line};border-left:3px solid ${C.red};border-radius:10px">
+<p class="x-red" style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:${C.red}">${label}</p>
+${list.map((c) => `<p class="x-mute" style="margin:0 0 5px;font-size:14px;line-height:1.5;color:${C.mute}"><b class="x-ink" style="color:${C.ink}">${esc(c.title)}.</b> ${esc(sum1(c.body, 170))}</p>`).join("")}</td></tr></table></td></tr>`;
 }
-function sectionHead(title: string, link?: string, linkText = "Open page →") {
-  return `<tr><td style="padding:30px 28px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-<td style="${NARROW};font-size:22px;line-height:1.05;color:${C.ink}">${esc(title)}</td>
-${link ? `<td align="right" style="white-space:nowrap;padding-left:10px"><a href="${link}" style="font-size:13px;font-weight:700;color:${C.red};text-decoration:none">${linkText}</a></td>` : ""}</tr></table></td></tr>`;
+function sectionHead(title: string, count?: string) {
+  return `<tr><td class="x-pad" style="padding:28px 28px 8px"><p class="x-ink" style="margin:0;${NARROW};font-size:21px;line-height:1.05;color:${C.ink}">${esc(title)}</p>${count ? `<p class="x-dim" style="margin:4px 0 0;font-size:12px;color:${C.dim}">${esc(count)}</p>` : ""}</td></tr>`;
 }
+const pageBtn = (href: string, text: string) =>
+  `<tr><td style="padding:6px 0 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" class="x-btn2" style="border:1px solid ${C.line};border-radius:10px;background:${C.soft}"><a href="${href}" class="x-ink" style="display:block;padding:11px 14px;font-size:14px;font-weight:700;color:${C.ink};text-decoration:none">${text}</a></td></tr></table></td></tr>`;
 
 function weeklyHtml(o: { name: string; dateLine: string; summary: string; favBlocks: string; top: News[]; site: Upd[]; deadline: string; noFavs: boolean; unsub: string }) {
-  const block = (inner: string) => `<tr><td style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${inner}</table></td></tr>`;
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"></head>
-<body style="margin:0;padding:0;background:${C.bg}">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.bg};padding:28px 10px"><tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:${C.card};border:1px solid ${C.line};border-radius:18px;overflow:hidden;${F};color:${C.ink}">
-<tr><td style="padding:22px 28px;border-bottom:1px solid ${C.line}"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-<td><table role="presentation" cellpadding="0" cellspacing="0"><tr><td><img src="${SITE}/icon-192.png" width="34" height="34" alt="" style="display:block;border:0;border-radius:9px"></td><td style="padding-left:12px;${NARROW};font-size:18px;letter-spacing:.5px;color:#fff">Project Infrared</td></tr></table></td>
-<td align="right" style="font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:${C.dim}">The Sunday</td></tr></table></td></tr>
-<tr><td style="padding:30px 28px 6px;background:linear-gradient(160deg,#2a0a10 0%,${C.card} 60%)">
-<p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:${C.red}">${esc(o.dateLine)}</p>
-<h1 style="margin:0 0 12px;${NARROW};font-size:34px;line-height:1;color:#fff">${o.name ? `${esc(o.name)}, here’s your week` : "Your week in Canadian medicine"}</h1>
-<p style="margin:0 0 22px;font-size:15px;line-height:1.55;color:${C.mute}">${esc(o.summary)}</p></td></tr>
-${o.deadline ? `<tr><td style="padding:0 28px 6px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${C.brand};border-radius:12px"><tr><td style="padding:12px 16px;font-size:14px;line-height:1.5;color:${C.ink}"><b style="color:${C.red}">CaRMS · </b>${o.deadline} <a href="${SITE}/#prep" style="color:${C.red};font-weight:700;text-decoration:none;white-space:nowrap">Residency prep →</a></td></tr></table></td></tr>` : ""}
-${o.noFavs ? `<tr><td style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#16161a;border:1px solid ${C.line};border-radius:12px"><tr><td style="padding:16px 18px;font-size:14px;line-height:1.55;color:${C.mute}"><b style="color:${C.ink}">Make this newsletter yours.</b> Star the specialties you’re considering and each Sunday you’ll get their news, opportunities and any changes to their pages here. <a href="${SITE}/#home" style="color:${C.red};font-weight:700;text-decoration:none">Browse specialties →</a></td></tr></table></td></tr>` : ""}
+  const block = (inner: string) => `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${inner}</table></td></tr>`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark">${STYLE}</head>
+<body class="x-bg" style="margin:0;padding:0;background:${C.bg}">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="x-bg" style="background:${C.bg};padding:24px 8px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="x-card" style="max-width:600px;background:${C.card};border:1px solid ${C.line};border-radius:18px;overflow:hidden;${F};color:${C.ink}">
+<tr><td class="x-pad" style="padding:26px 28px 24px;background-color:#c8102e;background-image:linear-gradient(125deg,#8e0b20 0%,#c8102e 50%,#ff4a5c 100%)">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><img src="${SITE}/icon-192.png" width="30" height="30" alt="" style="display:block;border:0;border-radius:8px"></td><td align="right" style="font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#ffffff">The Sunday</td></tr></table>
+<p style="margin:18px 0 6px;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#ffe3e6">${esc(o.dateLine)}</p>
+<h1 class="x-h1" style="margin:0 0 10px;${NARROW};font-size:32px;line-height:1;color:#ffffff">${o.name ? `${esc(o.name)}, here’s your week` : "Your week in Canadian medicine"}</h1>
+<p style="margin:0;font-size:15px;line-height:1.5;color:#ffecee">${esc(o.summary)}</p></td></tr>
+${o.deadline ? `<tr><td class="x-pad" style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="x-soft" style="padding:12px 16px;background:${C.soft};border:1px solid ${C.line};border-radius:12px;font-size:14px;line-height:1.5"><span class="x-red" style="color:${C.red};font-weight:700">CaRMS · </span><span class="x-ink" style="color:${C.ink}">${o.deadline}</span> <a href="${SITE}/#account/residency" class="x-red" style="color:${C.red};font-weight:700;text-decoration:none;white-space:nowrap">Residency prep →</a></td></tr></table></td></tr>` : ""}
+${o.noFavs ? `<tr><td class="x-pad" style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="x-soft" style="padding:14px 16px;background:${C.soft};border:1px solid ${C.line};border-radius:12px;font-size:14px;line-height:1.55"><b class="x-ink" style="color:${C.ink}">Make this newsletter yours.</b> <span class="x-mute" style="color:${C.mute}">Star the specialties you’re considering and each Sunday you’ll get their news and page changes here.</span> <a href="${SITE}/#home" class="x-red" style="color:${C.red};font-weight:700;text-decoration:none">Browse specialties →</a></td></tr></table></td></tr>` : ""}
 ${o.favBlocks}
-${o.top.length ? sectionHead("Across Canada", `${SITE}/#account`, "My News →") + block(o.top.map((x) => storyHtml(x, x.specs.length ? short(x.specs[0]) : "")).join("")) : ""}
-${o.site.length ? sectionHead("On Project Infrared") + block(changesHtml(o.site).replace("Changed on our page", "Site news")) : ""}
-<tr><td style="padding:28px 28px 6px" align="center"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:${C.brand};box-shadow:0 3px 10px rgba(200,16,46,.45)"><a href="${SITE}/#account" style="display:inline-block;padding:13px 24px;font-size:15px;font-weight:700;color:#fff;text-decoration:none;border-radius:10px">Open My News</a></td></tr></table></td></tr>
-<tr><td style="padding:22px 28px 26px"><p style="margin:0;padding-top:16px;border-top:1px solid ${C.line};font-size:12px;line-height:1.6;color:${C.dim}">You’re getting this because the Sunday newsletter is on in your Project Infrared settings. Summaries are ours; follow each link for the full story and confirm details with the source.<br><a href="${o.unsub}" style="color:${C.dim}">Unsubscribe from the newsletter</a> · <a href="${o.unsub.replace("t=weekly", "t=all")}" style="color:${C.dim}">Stop all emails</a> · <a href="${SITE}/#account/notifications" style="color:${C.dim}">Email settings</a><br>Project Infrared · London, Ontario, Canada</p></td></tr>
+${o.top.length ? sectionHead("Across Canada", "The week’s biggest stories for everyone") + block(o.top.map((x) => storyHtml(x, x.specs.length ? short(x.specs[0]) : "")).join("") + pageBtn(`${SITE}/#account/news`, "Open My News →")) : ""}
+${o.site.length ? sectionHead("On Project Infrared") + block(changesHtml(o.site, "Site news")) : ""}
+<tr><td class="x-pad" style="padding:28px 28px 8px" align="center"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:#c8102e"><a href="${SITE}/#account" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px">Open your dashboard</a></td></tr></table></td></tr>
+<tr><td class="x-pad" style="padding:18px 28px 26px"><p class="x-dim x-line" style="margin:0;padding-top:16px;border-top:1px solid ${C.line};font-size:12px;line-height:1.6;color:${C.dim}">You’re getting this because the Sunday newsletter is on in your Project Infrared settings. Summaries are ours; follow each link for the full story.<br><a href="${o.unsub}" class="x-dim" style="color:${C.dim}">Unsubscribe from the newsletter</a> · <a href="${o.unsub.replace("t=weekly", "t=all")}" class="x-dim" style="color:${C.dim}">Stop all emails</a> · <a href="${SITE}/#account/notifications" class="x-dim" style="color:${C.dim}">Email settings</a><br>Project Infrared · London, Ontario, Canada</p></td></tr>
 </table></td></tr></table></body></html>`;
 }
 
@@ -219,14 +239,16 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
   const withNews: string[] = [];
   const blocks = favs
     .map((f) => {
-      const st = W.news.filter((x) => !used.has(x.id) && touches(x.specs, f)).slice(0, 4);
+      const all = W.news.filter((x) => !used.has(x.id) && touches(x.specs, f));
+      const st = all.slice(0, 3);
       const ch = W.upd.filter((u) => u.kind === "data" && touches(u.specs, f));
       if (!st.length && !ch.length) return "";
       st.forEach((x) => used.add(x.id));
       nStories += st.length;
       nChanges += ch.length;
       withNews.push(short(f));
-      return sectionHead(NAMES[f], pageHref(f)) + `<tr><td style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${changesHtml(ch)}${st.map((x) => storyHtml(x)).join("")}</table></td></tr>`;
+      const cnt = [all.length ? `${all.length} ${all.length === 1 ? "story" : "stories"}` : "", ch.length ? `${ch.length} page ${ch.length === 1 ? "change" : "changes"}` : ""].filter(Boolean).join(" · ");
+      return sectionHead(NAMES[f], cnt) + `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${changesHtml(ch)}${st.map((x) => storyHtml(x)).join("")}${pageBtn(pageHref(f), all.length > 3 ? `See all ${all.length} on the page →` : `Read more on the page →`)}</table></td></tr>`;
     })
     .join("");
   const top = W.news.filter((x) => x.top && !used.has(x.id)).slice(0, favs.length ? 3 : 5);
