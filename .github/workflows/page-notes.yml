@@ -1,0 +1,31 @@
+# When a weekly news pull request (branch news-YYYY-MM-DD) is merged, post its page-change notes
+# so they show on each page's News tab and in the Sunday newsletter.
+# The notes are the JSON array between <!--notes--> and <!--/notes--> in the pull request description.
+name: Post page-change notes
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  notes:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'news-')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post notes
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+          NEWS_SECRET: ${{ secrets.NEWS_SECRET }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, sys, urllib.request
+          m = re.search(r"<!--notes-->(.*?)<!--/notes-->", os.environ.get("BODY") or "", re.S)
+          if not m:
+              print("No notes in this pull request."); sys.exit(0)
+          raw = re.sub(r"^\s*```(json)?|```\s*$", "", m.group(1).strip())
+          updates = json.loads(raw)
+          req = urllib.request.Request(
+              "https://bazqlqgoqamqofgzoioq.supabase.co/functions/v1/news-publish",
+              data=json.dumps({"items": [], "updates": updates}).encode(),
+              headers={"Content-Type": "application/json", "x-news-secret": os.environ["NEWS_SECRET"]},
+              method="POST")
+          print(urllib.request.urlopen(req).read().decode())
+          PY

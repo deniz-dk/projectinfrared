@@ -68,7 +68,10 @@ Deno.serve(async (req) => {
     const { error } = await sb.from("site_updates").insert(updates);
     if (error) return Response.json({ error: "site_updates: " + error.message }, { status: 500 });
   }
-  const s = body.sweep || {};
-  await sb.from("news_sweeps").insert({ checked: Number.isFinite(s.checked) ? s.checked : null, found: added, note: str(s.note, 300) || null });
+  // Only the weekly news check sends "sweep"; page-change notes posted after a merge don't count as a check
+  if (body.sweep) {
+    const s = body.sweep;
+    await sb.from("news_sweeps").insert({ checked: Number.isFinite(s.checked) ? s.checked : null, found: added, note: str(s.note, 300) || null });
+  }
   return Response.json({ added, duplicates: items.length - added, updates: updates.length, skipped });
 });
