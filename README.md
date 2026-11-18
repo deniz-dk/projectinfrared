@@ -9,3 +9,4 @@ projectinfrared.org: Canadian and Ontario medical specialties, from CaRMS to pra
 - `setup*.sql`: database setup, run once each in Supabase, in order.
 
 No secrets live in this repo. The Supabase key in build.py is the public "publishable" key.
+<!-- deploy check 2146 -->
