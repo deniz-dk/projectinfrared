@@ -103,7 +103,7 @@ function prepSteps(P) {
     return Object.assign({}, s, { st });
   });
 }
-function renderPrep() {
+function renderPrep(into) {
   const main = $("#main");
   const crumb = `<p class="crumb"><a href="#home">Home</a> / <a href="#account">Profile</a> / Residency prep</p>`;
   if (!Acct.on || !Acct.user) {
@@ -220,8 +220,11 @@ function renderPrep() {
       : `<p class="prepempty">Programs appear here once you mark them Applied, Invited or Interviewed.</p>`
   }</section>`;
 
-  main.innerHTML = `${crumb}<div class="spechead"><h1>Residency prep</h1><label class="prepyear">Match year <select data-year>${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label></div>
-  ${hero}<div class="prepgrid"><div class="prepcol">${tl}</div><div class="prepcol">${todo}${intCard}${favCard}${remind}</div></div>${progs}${rank}`;
+  const yearSel = `<label class="prepyear">Match year <select data-year>${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label>`;
+  const body = `${hero}<div class="prepgrid"><div class="prepcol">${tl}</div><div class="prepcol">${todo}${intCard}${favCard}${remind}</div></div>${progs}${rank}`;
+  // Inside the profile's Residency tab: hand the page back instead of drawing it
+  if (into) return `<div class="prepintab"><div class="prepinbar"><span class="prepinsub">${P.year} R-1 match · saves to your account</span>${yearSel}</div>${body}</div>`;
+  main.innerHTML = `${crumb}<div class="spechead"><h1>Residency prep</h1>${yearSel}</div>${body}`;
   wirePrep(P);
 }
 const prepWhere = (pr) => acctEsc([pr.school, prepStream(pr.stream)].filter(Boolean).join(" · "));
@@ -245,7 +248,8 @@ function wirePrep(P) {
   const redraw = () => {
     const y = scrollY;
     prepSave();
-    renderPrep();
+    if (hashParts()[0] === "account") renderAccount(); // the prep page lives in the profile's Residency tab
+    else renderPrep();
     afterRender();
     scrollTo(0, y);
   };

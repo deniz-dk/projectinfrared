@@ -414,6 +414,10 @@ function acctInit() {
   // Dashboard route, and the save-comparison button on the compare page
   const _render = render;
   render = function () {
+    if (hashParts()[0] === "prep" && Acct.user) {
+      location.replace("#account/residency"); // residency prep now lives in the profile
+      return;
+    }
     if (hashParts()[0] === "prep") {
       document.body.classList.remove("is-home");
       renderPrep();

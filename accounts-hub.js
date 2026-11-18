@@ -158,8 +158,7 @@ function renderAccount() {
   const applying = prepState().applying !== false;
   const news = typeof myNewsCard === "function";
   const TABS = [
-    ["Overview", () => `${emailNudge()}${applying ? prepCard() : ""}${news ? myNewsCard(3) : ""}${quizCard}`],
-    ["Specialties", () => `${topCard}${slCard}${tierCard}`],
+    ["Overview", () => `${emailNudge()}${applying ? prepCard() : ""}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
     ["Residency", () => residencyCards()],
     news ? ["News", () => myNewsCard()] : null,
     ["Notifications", () => emailCard()],
@@ -193,6 +192,7 @@ function renderAccount() {
       }),
   );
   wireSettings(main);
+  if (main.querySelector(".prepintab")) wirePrep(prepState());
   const lo = main.querySelector("[data-hub-logout]");
   if (lo) lo.onclick = () => acctLogout();
   wireHub();
@@ -401,7 +401,7 @@ function prepCard() {
   t.setHours(0, 0, 0, 0);
   const days = next ? Math.round((prepDay(next.d) - t) / 864e5) : null;
   const n = P.progs.filter((p) => p.status !== "no").length;
-  return `<a class="hubcard hubwide hubprep" href="#prep"><span class="hpl"><span class="prepkick">Residency prep · ${P.year} match</span><b>${next ? next.t : "Plan your match"}</b><small>${next ? prepFmt(next.d, { weekday: "short", month: "short", day: "numeric" }) + " · " : ""}${n} program${n === 1 ? "" : "s"} tracked</small></span>${next ? `<span class="hpc"><b>${days <= 0 ? "Today" : days}</b><small>${days <= 0 ? "" : days === 1 ? "day" : "days"}</small></span>` : ""}<span class="btn hpgo">Open →</span></a>`;
+  return `<a class="hubcard hubwide hubprep" href="#account/residency" data-gotab="residency"><span class="hpl"><span class="prepkick">Residency prep · ${P.year} match</span><b>${next ? next.t : "Plan your match"}</b><small>${next ? prepFmt(next.d, { weekday: "short", month: "short", day: "numeric" }) + " · " : ""}${n} program${n === 1 ? "" : "s"} tracked</small></span>${next ? `<span class="hpc"><b>${days <= 0 ? "Today" : days}</b><small>${days <= 0 ? "" : days === 1 ? "day" : "days"}</small></span>` : ""}<span class="btn hpgo">Open →</span></a>`;
 }
 
 /* Settings: where you are in training, whether you're preparing for CaRMS, and which emails you get */
@@ -443,15 +443,7 @@ function residencyCards() {
   const P = prepState();
   if (P.applying === false)
     return `<section class="hubcard hubwide"><h2>${hsvg("compass")}Residency prep</h2><div class="hubempty">Turn on <b>Preparing for CaRMS</b> in Settings to get a match timeline, checklist, program tracker and draft rank list.</div><a class="tbtn" href="#account/settings" data-gotab="settings">Open Settings</a></section>`;
-  const steps = prepSteps(P).filter((s) => s.st === "now" || s.st === "next").slice(0, 5);
-  const progs = P.progs.filter((p) => p.status !== "no");
-  const lab = Object.fromEntries(PREP_STATUS);
-  return `${prepCard()}<section class="hubcard"><h2>${hsvg("compass")}Coming up</h2><p class="hubsub">${P.year} match</p>
-    ${steps.length ? `<ol class="hubdates">${steps.map((s) => `<li class="${s.st}"><span>${prepFmt(s.d, { month: "short", day: "numeric" })}</span><b>${acctEsc(s.t)}</b></li>`).join("")}</ol>` : `<div class="hubempty">No dated steps left for this match year.</div>`}
-    <a class="tbtn" href="#prep">Full timeline</a></section>
-  <section class="hubcard"><h2>${hsvg("star")}My programs</h2><p class="hubsub">${progs.length} tracked${P.rank.length ? ` · ${P.rank.length} on your draft rank list` : ""}</p>
-    ${progs.length ? `<ul class="hubprogs">${progs.slice(0, 8).map((p) => { const x = prepProg(p.k); return `<li><span><b>${acctEsc(x.name)}</b><small>${prepWhere(x.pr)}</small></span><span class="hubtag">${acctEsc(lab[p.status || "considering"] || "")}</span></li>`; }).join("")}</ul>${progs.length > 8 ? `<p class="hubsub">and ${progs.length - 8} more</p>` : ""}` : `<div class="hubempty">Add the programs you’re considering on the prep page.</div>`}
-    <a class="tbtn" href="#prep">Manage programs</a></section>`;
+  return `<div class="hubwide hubprepfull">${renderPrep(true)}</div>`;
 }
 function wireSettings(main) {
   const P = prepState();

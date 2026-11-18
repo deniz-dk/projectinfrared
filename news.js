@@ -3,7 +3,19 @@
    - My News in the profile: the same, for the specialties you've starred.
    Stories live in Supabase (news_items, site_updates, news_sweeps), added each week by the news check. */
 const NEWS = { items: [], upd: [], sweep: null, ready: false, off: false };
-const NEWS_KIND = { policy: "Policy", match: "Match", pay: "Pay", jobs: "Jobs", opportunity: "Opportunity", research: "Research", news: "News" };
+const NEWS_KIND = { trend: "Trend", policy: "Policy", match: "Match", pay: "Pay", jobs: "Jobs", opportunity: "Opportunity", research: "Research", news: "News" };
+// Line icons for stories without a photo: each kind gets its own cover
+const NEWS_ICO = {
+  policy: '<path d="M3 21h18M5 21V10m4 11V10m6 11V10m4 11V10M2 10l10-6 10 6z"/>',
+  match: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  pay: '<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/>',
+  jobs: '<rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M9 7.5V5.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 5.5v2M3 13h18"/>',
+  opportunity: '<path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.1L7 19l1.5-5.7L4 9.5l5.8-.9z"/>',
+  research: '<path d="M9 3h6M10 3v6l-5.5 9.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3M7.5 15h9"/>',
+  trend: '<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',
+  news: '<rect x="3" y="4" width="15" height="16" rx="2"/><path d="M18 8h2a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2M7 8h7M7 12h7M7 16h4"/>',
+};
+const nCover = (x) => `<span class="nimg ngen" aria-hidden="true"><svg viewBox="0 0 24 24">${NEWS_ICO[x.kind] || NEWS_ICO.news}</svg><span class="nsrc">${nEsc(x.source)}</span></span>`;
 const nBase = (k) => (/^sub-([a-z]+)-\d+$/.exec(k) || [, k])[1];
 const nDate = (d) => new Date(String(d).slice(0, 10) + "T12:00:00").toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" });
 const nEsc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -59,8 +71,8 @@ function newsRefresh() {
 
 function newsCard(x, tag) {
   const url = nUrl(x.url), img = nUrl(x.image);
-  return `<a class="ncard k-${nEsc(x.kind)}${img ? "" : " noimg"}" href="${nEsc(url)}" target="_blank" rel="noopener">
-    ${img ? `<span class="nimg" aria-hidden="true"><img src="${nEsc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.parentNode.classList.add('noimg');this.parentNode.remove()"></span>` : ""}
+  return `<a class="ncard k-${nEsc(x.kind)}" href="${nEsc(url)}" target="_blank" rel="noopener">
+    ${img ? `<span class="nimg" aria-hidden="true"><img src="${nEsc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.outerHTML=this.parentNode.dataset.cover" data-x></span>`.replace("data-x", `data-cover="${nEsc(nCover(x))}"`) : nCover(x)}
     <span class="nbody"><span class="nmeta"><b class="nk k-${nEsc(x.kind)}">${NEWS_KIND[x.kind] || "News"}</b><span>${nDate(x.published)} · ${nEsc(x.source)}</span>${tag ? `<span class="ntag">${nEsc(tag)}</span>` : ""}</span>
     <b class="nt">${nEsc(x.title)}</b><span class="ns">${nEsc(x.summary)}</span></span></a>`;
 }

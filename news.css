@@ -6,7 +6,6 @@
 .ncard:hover{border-color:var(--scrub);transform:translateY(-2px);box-shadow:0 10px 24px -18px rgba(200,16,46,.7)}
 .ncard:focus-visible{outline:2px solid var(--scrub);outline-offset:2px}
 .nimg{position:relative;display:block;aspect-ratio:16/8;background:var(--bg);overflow:hidden;border-bottom:1px solid var(--line)}
-.ncard.noimg{border-top:3px solid var(--k,var(--muted))}
 .nimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .nbody{display:flex;flex-direction:column;gap:5px;padding:12px 14px 14px;min-width:0}
 .nmeta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:.76rem;color:var(--muted)}
@@ -18,7 +17,7 @@
 .nlead .nimg{flex:0 0 46%;aspect-ratio:auto;min-height:190px}
 .nlead .nbody{justify-content:center;padding:16px 18px}
 .nlead .nt{font-size:1.2rem}
-.k-policy{--k:var(--sky)}.k-match{--k:var(--scrub)}.k-pay{--k:var(--good)}.k-jobs{--k:var(--amber)}.k-opportunity{--k:var(--vio)}.k-research{--k:#1f8a8a}.k-news{--k:var(--muted)}
+.k-policy{--k:var(--sky)}.k-match{--k:var(--scrub)}.k-pay{--k:var(--good)}.k-jobs{--k:var(--amber)}.k-opportunity{--k:var(--vio)}.k-research{--k:#1f8a8a}.k-news{--k:#5e6168}.k-trend{--k:#d9480f}
 .nmore{margin:-2px 0 14px}
 .nmore summary{cursor:pointer;font-weight:600;font-size:.9rem;color:var(--muted);padding:6px 0;list-style-position:inside}
 .nmore summary:hover{color:var(--scrub)}
@@ -39,3 +38,12 @@
   .nlead .nimg{flex:none;aspect-ratio:16/8;min-height:0}
   .nchg li{grid-template-columns:minmax(0,1fr);gap:2px}
 }
+
+/* Generated covers for stories without a photo: the kind's colour, a soft pattern, a big line icon and the source */
+.ngen{display:flex;align-items:flex-end;aspect-ratio:16/7;padding:12px 14px;border-bottom:0;
+  background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.22),transparent 45%),radial-gradient(rgba(255,255,255,.14) 1px,transparent 1.4px) 0 0/14px 14px,linear-gradient(135deg,color-mix(in srgb,var(--k) 72%,#000) 0%,var(--k) 100%)}
+.ngen svg{position:absolute;right:-6%;top:50%;transform:translateY(-50%) rotate(-8deg);width:46%;height:auto;max-height:150%;fill:none;stroke:rgba(255,255,255,.3);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+.ncard:hover .ngen svg{transform:translateY(-50%) rotate(-2deg) scale(1.06)}
+.nsrc{position:relative;font:800 .78rem/1.1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.25);max-width:62%}
+.nlead .ngen{aspect-ratio:auto}
+.hubnews .ngen{aspect-ratio:16/6}

@@ -137,6 +137,7 @@ const pageHref = (k: string) => {
 };
 const short = (k: string) => (NAMES[k] || k).replace(/ \(.*\)$/, "");
 const KIND: Record<string, [string, string]> = {
+  trend: ["Trend", "#ff8a4c"],
   policy: ["Policy", "#6fb1ff"], match: ["Match", "#ff5a6a"], pay: ["Pay", "#3ecf8e"], jobs: ["Jobs", "#f5b942"],
   opportunity: ["Opportunity", "#c69bff"], research: ["Research", "#4dd4d4"], news: ["News", "#a4a6ad"],
 };
