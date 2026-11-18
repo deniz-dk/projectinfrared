@@ -12,7 +12,7 @@ The site at projectinfrared.org is built by Netlify from `main`. A push to `main
 - The Claude preview artifact (https://claude.ai/artifact/8abffwyV9Z8E99B7XLBTi8) shows `src/site.html` without accounts. Republish it after site changes if this session can.
 
 ## Weekly news
-Every Saturday a scheduled task publishes the week's news through the `news-publish` Supabase function. When news shows that site data is out of date, it opens a pull request here (branch `news-YYYY-MM-DD`) with the fix. Nali approves it by merging. On merge, `.github/workflows/page-notes.yml` posts the notes found between `<!--notes-->` and `<!--/notes-->` in the PR description, using the repo secret NEWS_SECRET.
+Every Saturday at 2:35 a.m. Toronto time, a scheduled task publishes the week's news through the `news-publish` Supabase function. When news shows that site data is out of date, it opens a pull request here (branch `news-YYYY-MM-DD`) with the fix. The run messages Nali a plain-English rundown, and she approves by replying "approve" in that run's chat. The run then merges it. Never ask her to use GitHub herself. On merge, `.github/workflows/page-notes.yml` posts the notes found between `<!--notes-->` and `<!--/notes-->` in the PR description, using the repo secret NEWS_SECRET.
 
 ## Common requests from Nali
 - **"Run the news" / "news check":** start the scheduled task "Project Infrared news check" now (list the scheduled tasks to find it, then fire it). It searches, publishes and opens a pull request for page fixes. If scheduled tasks aren't available, do the same steps by hand: the task's instructions are its prompt.
