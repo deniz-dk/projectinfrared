@@ -12,7 +12,7 @@ The site at projectinfrared.org is built by Netlify from `main`. A push to `main
 - The Claude preview artifact (https://claude.ai/artifact/8abffwyV9Z8E99B7XLBTi8) shows `src/site.html` without accounts. Republish it after site changes if this session can.
 
 ## Weekly news
-Every Saturday a scheduled task publishes the week's news through the `news-publish` Supabase function. When news shows that site data is out of date, it opens a pull request here with the fix. Nali approves it by merging.
+Every Saturday a scheduled task publishes the week's news through the `news-publish` Supabase function. When news shows that site data is out of date, it opens a pull request here (branch `news-YYYY-MM-DD`) with the fix. Nali approves it by merging. On merge, `.github/workflows/page-notes.yml` posts the notes found between `<!--notes-->` and `<!--/notes-->` in the PR description, using the repo secret NEWS_SECRET.
 
 ## Rules
 - Never commit secrets: no Resend key, no service-role key, no CRON_SECRET or NEWS_SECRET. The `sb_publishable_…` key in build.py is public and fine.
