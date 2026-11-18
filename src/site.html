@@ -2262,6 +2262,11 @@ h1.withtier .tiername {
 .navitem .navval{font-size:.78rem;color:var(--muted);white-space:nowrap}
 .navitem .navsub{display:block;font-size:.74rem;color:var(--muted);font-weight:400}
 .navgroup.slh{display:flex;justify-content:space-between;align-items:center}
+.favtog{display:flex;align-items:center;gap:6px;width:100%;padding:0;border:0;background:0 0;font:inherit;color:inherit;letter-spacing:inherit;cursor:pointer;text-align:left}
+.favtog:hover{color:var(--scrub)}
+.favtog svg{width:9px;height:9px;fill:currentColor;transition:transform .18s}
+.favtog[aria-expanded="false"] svg{transform:rotate(-90deg)}
+.favtog small{margin-left:auto;font-weight:600;opacity:.7}
 .navgroup.slh a{font-weight:600;color:var(--scrub);text-decoration:none;font-size:.76rem}
 .pagetools{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 16px}
 .tbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:.84rem;cursor:pointer;text-decoration:none;transition:border-color .15s,background .15s}
@@ -11949,9 +11954,16 @@ function buildNav() {
     const h = document.createElement("div");
     h.className = "navgroup slh";
     const nSpec = sl.filter((k) => S.find((x) => x.id === k)).length;
-    h.innerHTML = `<span>Favorites</span>`;
+    let shut = false;
+    try { shut = localStorage.getItem("ir-favs-shut") === "1"; } catch (e) {}
+    h.innerHTML = `<button type="button" class="favtog" aria-expanded="${!shut}"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3l3 4 3-4z"/></svg><span>Favorites</span><small>${sl.length}</small></button>`;
+    h.querySelector("button").onclick = () => {
+      try { localStorage.setItem("ir-favs-shut", shut ? "0" : "1"); } catch (e) {}
+      buildNav();
+      mark();
+    };
     nav.appendChild(h);
-    sl.forEach((k) => {
+    if (!shut) sl.forEach((k) => {
       const L = slLabel(k);
       if (!L) return;
       const b = document.createElement("button");
@@ -15064,7 +15076,7 @@ function renderHome() {
   $("#main").innerHTML = `<section class="nv" id="nv" aria-label="Project Infrared">
   <div class="nvfacts">${nvCharts().map((f) => `<div class="nvfact nv-${f.size}">${f.svg}<span class="nvl">${f.label}</span><span class="nvs">${NV_SHORT[f.label] || f.label}</span></div>`).join("")}</div>
   <div class="nvmask" aria-hidden="true"></div><div class="nvdot" aria-hidden="true"></div>
-  <div class="nvtop"><div class="herotitle">${LOGO(40)}<h1>Project Infrared<button type="button" class="ver" id="verpill" aria-label="Version 0.6 patch notes">beta v0.6</button></h1></div></div>
+  <div class="nvtop"><div class="herotitle">${LOGO(40)}<h1>Project Infrared<button type="button" class="ver" id="verpill" aria-label="Version 0.7 patch notes">beta v0.7</button></h1></div></div>
   <div class="nvhead"><div><p class="nvtag">Helping medical students see in the dark.</p><p class="nvlede">The parts of choosing a specialty that usually stay hidden, for every Canadian specialty and subspecialty.</p></div><button type="button" class="nvmore" id="nvmore">Start exploring <span aria-hidden="true">↓</span></button></div>
  </section>
  <h2 class="peek">Residency programs</h2><p class="note">Direct-entry residencies in the CaRMS R-1 match. Open one for a year-by-year breakdown, locations, and the specialties it leads to. A longer, redder bar means fewer seats per first-choice applicant in 2026: a harder match.</p>
@@ -15270,14 +15282,14 @@ function initNightVision() {
       scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
     };
 }
-const PATCH_NEW = ["Major design overhaul: a new homepage, new fonts and logo, and smoother pages with swipeable tabs", "Accounts: sign in to save your profile and preferences", "New specialty match quiz with your top five matches and best-fit fellowships", "Favorites: star specialties and keep them at the top of your sidebar"];
-const PATCH_NEXT = ["Full matched-resident research data", "Live fee and match news"];
+const PATCH_NEW = ["Complete UI overhaul with new elements across the site", "Profiles: your quiz results, personal rankings and favorites in one place", "News on every specialty page, plus a weekly newsletter for members", "Residency prep: your CaRMS timeline, checklist, programs and rank list"];
+const PATCH_NEXT = ["Matched-resident research data"];
 function wireVer() {
   const el = document.getElementById("verpill");
   if (!el) return;
   const li = (a) => a.map((t) => `<li>${t}</li>`).join("");
   el.dataset.tipw = "320";
-  el.dataset.tiphtml = `<span class="tiptitle">Patch notes · v0.6</span><span class="pnh"><i class="pulse live" aria-hidden="true"></i>New</span><ul class="pn">${li(PATCH_NEW)}</ul><span class="pnh"><i class="pulse next" aria-hidden="true"></i>Coming</span><ul class="pn">${li(PATCH_NEXT)}</ul><span class="pnfoot">The site is still being updated.</span>`;
+  el.dataset.tiphtml = `<span class="tiptitle">Patch notes · v0.7</span><span class="pnh"><i class="pulse live" aria-hidden="true"></i>New</span><ul class="pn">${li(PATCH_NEW)}</ul><span class="pnh"><i class="pulse next" aria-hidden="true"></i>Coming</span><ul class="pn">${li(PATCH_NEXT)}</ul><span class="pnfoot">The site is still being updated.</span>`;
   el.classList.add("hastip");
   el.addEventListener("mouseenter", () => { if (matchMedia("(hover:hover)").matches) showTip(el); });
   el.addEventListener("mouseleave", () => { if (!el.classList.contains("open")) hideTip(); });

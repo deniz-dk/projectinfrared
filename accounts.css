@@ -405,3 +405,26 @@ input:autofill{background:var(--bg)!important;color:var(--ink)!important}
 .prepinbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;flex-wrap:wrap}
 .prepinsub{font-size:.88rem;color:var(--muted);font-weight:600}
 .hubprepfull{display:block}
+
+/* Profile header: red gradient banner with rings, big name, white text */
+.hubcard.hubhead{position:relative;overflow:hidden;display:flex;align-items:center;gap:22px;padding:30px 30px 28px;border:0;color:#fff;
+  background:radial-gradient(circle at 12% 0%,rgba(255,255,255,.18),transparent 40%),radial-gradient(circle at 100% 100%,rgba(0,0,0,.35),transparent 55%),linear-gradient(125deg,#8e0b20 0%,#c8102e 45%,#ff4a5c 100%);
+  box-shadow:0 22px 44px -28px rgba(200,16,46,.75)}
+.hubdeco{position:absolute;right:-60px;top:50%;width:300px;height:300px;transform:translateY(-50%);fill:none;stroke:rgba(255,255,255,.16);stroke-width:7;pointer-events:none}
+.hubhead .hubavatar{position:relative;width:84px;height:84px;font-size:2.4rem;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.7);color:#fff;flex:none;backdrop-filter:blur(2px)}
+.hubhead .hubwho{position:relative;min-width:0;flex:1}
+.hubkick{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.78);margin-top:6px}
+.hubhead .hubname{display:flex;align-items:baseline;gap:4px 14px;flex-wrap:wrap}
+.hubhead .hubname>span{font:800 clamp(2.2rem,5vw,3.4rem)/.95 var(--serif);font-stretch:70%;text-transform:uppercase;letter-spacing:.01em;overflow-wrap:anywhere}
+.hubhead .hubedit{color:#fff;opacity:.85}
+.hubhead .hubedit:hover{color:#fff;opacity:1}
+.hubhead .hublogout{position:absolute;top:16px;right:16px;z-index:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.55);color:#fff}
+.hubhead .hublogout:hover{background:#fff;color:var(--scrub)}
+.hubhead .hubuser input{background:rgba(255,255,255,.95);color:#141416;border-color:transparent}
+.hubhead .hubuser .tbtn{color:#fff;border-color:rgba(255,255,255,.6);background:transparent}
+.hubhead .hubuser .btn{background:#fff;color:var(--scrub)}
+.hubhead .hubmsg{color:#fff}
+@media (max-width:760px){.hubcard.hubhead{padding:26px 18px 22px;gap:14px}.hubhead .hubavatar{width:60px;height:60px;font-size:1.7rem}.hubdeco{width:220px;height:220px;right:-70px}}
+/* Residency tab: both columns start level */
+.hubprepfull .prepgrid{align-items:start}
+.hubprepfull .prepgrid>.prepcol>:first-child{margin-top:0}

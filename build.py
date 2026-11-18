@@ -19,7 +19,6 @@ rep('setNavH();\nalignHours();\nsetIncomeStars();\nbuildNav();\nrender();',
     'setNavH();\nalignHours();\nsetIncomeStars();\nbuildNav();\nrender();\n' + js)
 # Wording that changes once accounts exist
 rep('Your weights are saved in this browser only.', 'Log in and your weights are saved to your account, so they follow you to any device.')
-rep('"Accounts: sign in to save your profile and preferences"', '"Free accounts: your favorites, notes and tiers follow you to any device, and you can report errors from any page"')
 out = HERE / 'deploy'
 out.mkdir(exist_ok=True)
 (out / 'index.html').write_text(s, encoding='utf-8')

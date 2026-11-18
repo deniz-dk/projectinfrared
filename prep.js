@@ -221,7 +221,7 @@ function renderPrep(into) {
   }</section>`;
 
   const yearSel = `<label class="prepyear">Match year <select data-year>${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label>`;
-  const body = `${hero}<div class="prepgrid"><div class="prepcol">${tl}</div><div class="prepcol">${todo}${intCard}${favCard}${remind}</div></div>${progs}${rank}`;
+  const body = `${hero}<div class="prepgrid"><div class="prepcol">${tl}</div><div class="prepcol">${todo}${intCard}${favCard}${into ? "" : remind}</div></div>${progs}${rank}`;
   // Inside the profile's Residency tab: hand the page back instead of drawing it
   if (into) return `<div class="prepintab"><div class="prepinbar"><span class="prepinsub">${P.year} R-1 match · saves to your account</span>${yearSel}</div>${body}</div>`;
   main.innerHTML = `${crumb}<div class="spechead"><h1>Residency prep</h1>${yearSel}</div>${body}`;

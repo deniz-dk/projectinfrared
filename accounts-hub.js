@@ -55,20 +55,12 @@ function renderAccount() {
   const tierOfKey = (k) => (S.find((x) => x.id === k) ? tierDots(tierOf(k)) : `<span class="hubtag">Fellowship</span>`);
 
   // --- profile header
-  const head = `<div class="hubcard hubhead"><button type="button" class="hublogout" data-hub-logout>Log out</button>
+  const head = `<div class="hubcard hubhead"><svg class="hubdeco" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="88"/><circle cx="100" cy="100" r="62"/><circle cx="100" cy="100" r="36"/></svg><button type="button" class="hublogout" data-hub-logout>Log out</button>
     <div class="hubavatar" aria-hidden="true">${acctEsc(hubName()[0].toUpperCase())}</div>
     <div class="hubwho"><div class="hubname"><span>${acctEsc(hubName())}</span><button type="button" class="hubedit" data-name-edit aria-expanded="false">${P.username ? "Edit name" : "Set your name"}</button></div>
-      <div class="hubmail">${acctEsc(Acct.user.email)}</div>
+      <div class="hubkick">Your Project Infrared profile</div>
       <form class="hubuser" data-f="username" hidden><label for="h_user" class="sr">Name</label><input id="h_user" type="text" maxlength="30" placeholder="What should we call you?" value="${acctEsc(P.username || "")}" autocomplete="nickname" spellcheck="false"><button class="btn" type="submit">Save</button><button class="tbtn" type="button" data-name-cancel>Cancel</button><span class="hubmsg" role="status"></span></form></div>
-    <div class="hubstats">${[
-      [sl.length, "Favorites"],
-      [picks.length, "Top picks"],
-      [nNotes, "Notes"],
-      [qz ? qz.list[0].pct + "%" : "–", "Top match"],
-      [reports.length, "Reports"],
-    ]
-      .map(([n, t]) => `<div><b>${n}</b><span>${t}</span></div>`)
-      .join("")}</div></div>`;
+</div>`;
 
   // --- top picks
   const pickRows = picks
@@ -158,7 +150,7 @@ function renderAccount() {
   const applying = prepState().applying !== false;
   const news = typeof myNewsCard === "function";
   const TABS = [
-    ["Overview", () => `${emailNudge()}${applying ? prepCard() : ""}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
+    ["Overview", () => `${applying ? prepCard() : ""}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
     ["Residency", () => residencyCards()],
     news ? ["News", () => myNewsCard()] : null,
     ["Notifications", () => emailCard()],
