@@ -284,9 +284,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
   const unsub = `${SELF}?u=${r.email_token}&t=weekly`;
   const dateLine = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto", weekday: "long", month: "long", day: "numeric", year: "numeric" });
   const html = weeklyHtml({ name: (r.username || "").trim(), dateLine, summary, favBlocks: blocks, top, site, deadline, noFavs: !favs.length, unsub });
-  const subject = withNews.length
-    ? `${withNews.slice(0, 2).join(", ")}${withNews.length > 2 ? ` +${withNews.length - 2}` : ""}: your week in medicine`
-    : "Your week in Canadian medicine";
+  const subject = "Project Infrared · The Sunday";
   return { html, subject, unsub };
 }
 
