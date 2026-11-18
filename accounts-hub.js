@@ -58,7 +58,7 @@ function renderAccount() {
   const head = `<div class="hubcard hubhead"><svg class="hubdeco" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="88"/><circle cx="100" cy="100" r="62"/><circle cx="100" cy="100" r="36"/></svg><button type="button" class="hublogout" data-hub-logout>Log out</button>
     <div class="hubavatar" aria-hidden="true">${acctEsc(hubName()[0].toUpperCase())}</div>
     <div class="hubwho"><div class="hubname"><span>${acctEsc(hubName())}</span><button type="button" class="hubedit" data-name-edit aria-expanded="false">${P.username ? "Edit name" : "Set your name"}</button></div>
-      <div class="hubkick">Your Project Infrared profile</div>
+      <div class="hubkick">Your Infrared Dashboard</div>
       <form class="hubuser" data-f="username" hidden><label for="h_user" class="sr">Name</label><input id="h_user" type="text" maxlength="30" placeholder="What should we call you?" value="${acctEsc(P.username || "")}" autocomplete="nickname" spellcheck="false"><button class="btn" type="submit">Save</button><button class="tbtn" type="button" data-name-cancel>Cancel</button><span class="hubmsg" role="status"></span></form></div>
 </div>`;
 

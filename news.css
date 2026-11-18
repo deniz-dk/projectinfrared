@@ -47,3 +47,4 @@
 .nsrc{position:relative;font:800 .78rem/1.1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.25);max-width:62%}
 .nlead .ngen{aspect-ratio:auto}
 .hubnews .ngen{aspect-ratio:16/6}
+.narchm{font:700 .78rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}

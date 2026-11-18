@@ -95,10 +95,17 @@ function newsTab(key, parent) {
     const s = (x.specs || []).find((s) => s !== key && nBase(s) === key);
     return !parent && s && !(x.specs || []).includes(key) ? nName(s) : "";
   };
-  const list = (arr, tagger) => {
+  // Recent stories show up front (trends stay a year); older ones go into an Archive grouped by month
+  const fresh = (x) => Date.now() - new Date(x.published + "T12:00:00") < (x.kind === "trend" ? 365 : 183) * 864e5;
+  const list = (all, tagger) => {
+    const arr = all.filter(fresh), old = all.filter((x) => !fresh(x));
     const first = arr.slice(0, 8), rest = arr.slice(8);
-    return `<div class="ngrid">${first.map((x, i) => newsCard(x, tagger && tagger(x)).replace('class="ncard ', i === 0 && nUrl(x.image) ? 'class="ncard nlead ' : 'class="ncard ')).join("")}</div>${
-      rest.length ? `<details class="nmore"><summary>${rest.length} older ${rest.length === 1 ? "story" : "stories"}</summary><div class="ngrid">${rest.map((x) => newsCard(x, tagger && tagger(x))).join("")}</div></details>` : ""
+    const months = {};
+    old.forEach((x) => (months[x.published.slice(0, 7)] = months[x.published.slice(0, 7)] || []).push(x));
+    return `${first.length ? `<div class="ngrid">${first.map((x, i) => newsCard(x, tagger && tagger(x)).replace('class="ncard ', i === 0 && nUrl(x.image) ? 'class="ncard nlead ' : 'class="ncard ')).join("")}</div>` : `<div class="nempty">No stories in the last six months.</div>`}${
+      rest.length ? `<details class="nmore"><summary>${rest.length} more from the last six months</summary><div class="ngrid">${rest.map((x) => newsCard(x, tagger && tagger(x))).join("")}</div></details>` : ""
+    }${
+      old.length ? `<details class="nmore narch"><summary>Archive · ${old.length} older ${old.length === 1 ? "story" : "stories"}</summary>${Object.keys(months).sort().reverse().map((m) => `<h4 class="narchm">${new Date(m + "-15T12:00:00").toLocaleDateString("en-CA", { month: "long", year: "numeric" })}</h4><div class="ngrid">${months[m].map((x) => newsCard(x, tagger && tagger(x))).join("")}</div>`).join("")}</details>` : ""
     }`;
   };
   const name = nName(key);
