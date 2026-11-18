@@ -186,6 +186,9 @@ body,.x-bg{background:${C.bg}!important}
 [data-ogsc] .x-soft{background:#1b1b1f!important}
 [data-ogsc] .x-ink{color:#ececef!important}
 [data-ogsc] .x-mute{color:#a9abb2!important}
+.body{margin:0}
+u + .body .gm-s{background:#000;mix-blend-mode:screen}
+u + .body .gm-d{background:#000;mix-blend-mode:difference}
 @media (max-width:480px){.x-pad{padding-left:18px!important;padding-right:18px!important}.x-h1{font-size:28px!important}}
 </style>`;
 
@@ -206,7 +209,10 @@ function changesHtml(list: Upd[], label = "Changed on our page") {
 ${list.map((c) => `<p class="x-mute" style="margin:0 0 5px;font-size:14px;line-height:1.5;color:${C.mute}"><b class="x-ink" style="color:${C.ink}">${esc(c.title)}.</b> ${esc(sum1(c.body, 170))}</p>`).join("")}</td></tr></table></td></tr>`;
 }
 function sectionHead(title: string, count?: string) {
-  return `<tr><td class="x-pad" style="padding:28px 28px 8px"><p class="x-ink" style="margin:0;${NARROW};font-size:21px;line-height:1.05;color:${C.ink}">${esc(title)}</p>${count ? `<p class="x-dim" style="margin:4px 0 0;font-size:12px;color:${C.dim}">${esc(count)}</p>` : ""}</td></tr>`;
+  return `<tr><td class="x-pad" style="padding:30px 28px 10px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+<td width="5" style="background:#c8102e;border-radius:3px">&nbsp;</td>
+<td class="x-soft" style="padding:12px 14px;background:${C.soft};border:1px solid ${C.line};border-left:0;border-radius:0 10px 10px 0">
+<p class="x-ink" style="margin:0;${NARROW};font-size:22px;line-height:1.05;letter-spacing:.3px;color:${C.ink}">${esc(title)}</p>${count ? `<p class="x-red" style="margin:4px 0 0;font-size:12px;font-weight:700;letter-spacing:.4px;color:${C.red}">${esc(count)}</p>` : ""}</td></tr></table></td></tr>`;
 }
 const pageBtn = (href: string, text: string) =>
   `<tr><td style="padding:6px 0 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" class="x-btn2" style="border:1px solid ${C.line};border-radius:10px;background:${C.soft}"><a href="${href}" class="x-ink" style="display:block;padding:11px 14px;font-size:14px;font-weight:700;color:${C.ink};text-decoration:none">${text}</a></td></tr></table></td></tr>`;
@@ -214,20 +220,20 @@ const pageBtn = (href: string, text: string) =>
 function weeklyHtml(o: { name: string; dateLine: string; summary: string; favBlocks: string; top: News[]; site: Upd[]; deadline: string; noFavs: boolean; unsub: string }) {
   const block = (inner: string) => `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${inner}</table></td></tr>`;
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark">${STYLE}</head>
-<body class="x-bg" style="margin:0;padding:0;background:${C.bg}">
+<body class="x-bg body" style="margin:0;padding:0;background:${C.bg}">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="x-bg" style="background:${C.bg};padding:24px 8px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="x-card" style="max-width:600px;background:${C.card};border:1px solid ${C.line};border-radius:18px;overflow:hidden;${F};color:${C.ink}">
 <tr><td class="x-pad" style="padding:26px 28px 24px;background-color:#c8102e;background-image:linear-gradient(125deg,#8e0b20 0%,#c8102e 50%,#ff4a5c 100%)">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><img src="${SITE}/icon-192.png" width="30" height="30" alt="" style="display:block;border:0;border-radius:8px"></td><td align="right" style="font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#ffffff">The Sunday</td></tr></table>
-<p style="margin:18px 0 6px;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#ffe3e6">${esc(o.dateLine)}</p>
-<h1 class="x-h1" style="margin:0 0 10px;${NARROW};font-size:32px;line-height:1;color:#ffffff">${o.name ? `${esc(o.name)}, here’s your week` : "Your week in Canadian medicine"}</h1>
-<p style="margin:0;font-size:15px;line-height:1.5;color:#ffecee">${esc(o.summary)}</p></td></tr>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><img src="${SITE}/icon-192.png" width="30" height="30" alt="" style="display:block;border:0;border-radius:8px"></td><td align="right" style="font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#ffffff"><span class="gm-s" style="display:block"><span class="gm-d" style="display:block">The Sunday</span></span></td></tr></table>
+<p style="margin:18px 0 6px;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#ffe3e6"><span class="gm-s" style="display:block"><span class="gm-d" style="display:block">${esc(o.dateLine)}</span></span></p>
+<h1 class="x-h1" style="margin:0 0 10px;${NARROW};font-size:32px;line-height:1;color:#ffffff"><span class="gm-s" style="display:block"><span class="gm-d" style="display:block">${o.name ? `${esc(o.name)}, here’s your week` : "Your week in Canadian medicine"}</span></span></h1>
+<p style="margin:0;font-size:15px;line-height:1.5;color:#ffecee"><span class="gm-s" style="display:block"><span class="gm-d" style="display:block">${esc(o.summary)}</span></span></p></td></tr>
 ${o.deadline ? `<tr><td class="x-pad" style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="x-soft" style="padding:12px 16px;background:${C.soft};border:1px solid ${C.line};border-radius:12px;font-size:14px;line-height:1.5"><span class="x-red" style="color:${C.red};font-weight:700">CaRMS · </span><span class="x-ink" style="color:${C.ink}">${o.deadline}</span> <a href="${SITE}/#account/residency" class="x-red" style="color:${C.red};font-weight:700;text-decoration:none;white-space:nowrap">Residency prep →</a></td></tr></table></td></tr>` : ""}
 ${o.noFavs ? `<tr><td class="x-pad" style="padding:18px 28px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="x-soft" style="padding:14px 16px;background:${C.soft};border:1px solid ${C.line};border-radius:12px;font-size:14px;line-height:1.55"><b class="x-ink" style="color:${C.ink}">Make this newsletter yours.</b> <span class="x-mute" style="color:${C.mute}">Star the specialties you’re considering and each Sunday you’ll get their news and page changes here.</span> <a href="${SITE}/#home" class="x-red" style="color:${C.red};font-weight:700;text-decoration:none">Browse specialties →</a></td></tr></table></td></tr>` : ""}
 ${o.favBlocks}
 ${o.top.length ? sectionHead("Across Canada", "The week’s biggest stories for everyone") + block(o.top.map((x) => storyHtml(x, x.specs.length ? short(x.specs[0]) : "")).join("") + pageBtn(`${SITE}/#account/news`, "Open My News →")) : ""}
 ${o.site.length ? sectionHead("On Project Infrared") + block(changesHtml(o.site, "Site news")) : ""}
-<tr><td class="x-pad" style="padding:28px 28px 8px" align="center"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:#c8102e"><a href="${SITE}/#account" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px">Open your dashboard</a></td></tr></table></td></tr>
+<tr><td class="x-pad" style="padding:28px 28px 8px" align="center"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:#c8102e"><a href="${SITE}/#account" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px"><span class="gm-s" style="display:block"><span class="gm-d" style="display:block">Open your dashboard</span></span></a></td></tr></table></td></tr>
 <tr><td class="x-pad" style="padding:18px 28px 26px"><p class="x-dim x-line" style="margin:0;padding-top:16px;border-top:1px solid ${C.line};font-size:12px;line-height:1.6;color:${C.dim}">You’re getting this because the Sunday newsletter is on in your Project Infrared settings. Summaries are ours; follow each link for the full story.<br><a href="${o.unsub}" class="x-dim" style="color:${C.dim}">Unsubscribe from the newsletter</a> · <a href="${o.unsub.replace("t=weekly", "t=all")}" class="x-dim" style="color:${C.dim}">Stop all emails</a> · <a href="${SITE}/#account/notifications" class="x-dim" style="color:${C.dim}">Email settings</a><br>Project Infrared · London, Ontario, Canada</p></td></tr>
 </table></td></tr></table></body></html>`;
 }
