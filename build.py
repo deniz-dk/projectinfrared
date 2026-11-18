@@ -38,3 +38,10 @@ for fname, outname in [('notify', 'notify-function.txt'), ('news-publish', 'news
     if fn.count('/*NAMES*/ {}') != 1: sys.exit(f'build: NAMES placeholder missing in {fname}/index.ts')
     (HERE / 'emails' / outname).write_text(fn.replace('/*NAMES*/ {}', names), encoding='utf-8')
 print('built', out / 'index.html', len(s))
+
+# Which commit this build came from (projectinfrared.org/version.txt), to confirm Netlify deploys pushes
+try:
+    sha = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], capture_output=True, text=True, cwd=HERE).stdout.strip()
+except Exception:
+    sha = ''
+(out / 'version.txt').write_text((sha or 'unknown') + '\n', encoding='utf-8')
