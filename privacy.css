@@ -1,0 +1,14 @@
+/* PRIVACY-CSS-START */
+.pvshort { margin: 6px 0 14px; max-width: 760px; }
+.pvshort h3 { margin: 0 0 4px; }
+.pvtoc { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 0 0 6px; max-width: 760px; }
+.pvtoc a { font-size: 0.85rem; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; }
+.pvtoc a:hover { border-color: var(--scrub); color: var(--scrub); }
+.pvsec { max-width: 760px; scroll-margin-top: 16px; }
+.pvsec h2 { margin-top: 28px; }
+.pvsec li { margin: 4px 0; }
+.sitefoot { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 36px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 0.82rem; color: var(--muted); }
+.sitefoot a { color: var(--muted); }
+.sitefoot a:hover { color: var(--scrub); }
+@media print { .sitefoot, .pvtoc { display: none; } }
+/* PRIVACY-CSS-END */

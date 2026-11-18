@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logo Drafts</title>
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Semi+Condensed:wght@500;600;700;800&family=Sofia+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#c8102e;--ink:#141416;--muted:#5e6168;--line:#e2e2e6;--bg:#f4f4f5;--card:#fff;--night:#111216}
+*{box-sizing:border-box}
+body{margin:0;padding:40px 32px 56px;background:var(--bg);color:var(--ink);font:15px/1.5 "Sofia Sans",system-ui,sans-serif}
+h1{font:800 40px/1.05 "Sofia Sans Semi Condensed",sans-serif;letter-spacing:-.02em;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 28px;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.top{display:flex;align-items:center;gap:22px;padding:26px 24px 18px}
+.top svg.big{width:96px;height:96px;flex:none}
+.name{font:700 13px/1 "Sofia Sans Semi Condensed";letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin:0 0 6px}
+.title{font:700 24px/1.1 "Sofia Sans Semi Condensed";margin:0 0 6px}
+.desc{color:var(--muted);font-size:14px;margin:0}
+.lock{display:flex;align-items:center;gap:12px;padding:16px 24px;border-top:1px solid var(--line)}
+.lock svg{width:40px;height:40px;flex:none}
+.word{font:700 28px/1 "Sofia Sans Semi Condensed";letter-spacing:-.01em}
+.word b{font-weight:800}
+.dark{background:var(--night);color:#fff;border-top:0}
+.sizes{display:flex;align-items:center;gap:14px;padding:12px 24px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.sizes svg{flex:none}
+.tab{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:8px 8px 0 0;padding:6px 10px;font-size:12px;color:var(--ink)}
+</style></head><body>
+<h1>Project Infrared Logo Drafts</h1>
+<p class="lede">Six directions, all set in the new title font (Sofia Sans Semi Condensed). Each card shows the mark, the logo beside the name on light and dark backgrounds, and how it reads as a browser-tab icon.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff4d5e"/><stop offset=".45" stop-color="#c8102e"/><stop offset="1" stop-color="#c8102e" stop-opacity="0"/></radialGradient>
+    <linearGradient id="spec" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#3a3c42"/><stop offset="1" stop-color="#c8102e"/></linearGradient>
+    <linearGradient id="beam" x1="0" x2="1"><stop offset="0" stop-color="#c8102e"/><stop offset="1" stop-color="#c8102e" stop-opacity="0"/></linearGradient>
+
+    <!-- 1 Ring monogram -->
+    <symbol id="m1" viewBox="0 0 64 64"><circle cx="32" cy="32" r="27.5" fill="none" stroke="#c8102e" stroke-width="5"/><text x="32" y="42.5" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="800" font-size="30" letter-spacing="-1" fill="#c8102e">iR</text></symbol>
+    <!-- 2 Signal tile -->
+    <symbol id="m2" viewBox="0 0 64 64"><rect x="3" y="3" width="58" height="58" rx="15" fill="#c8102e"/><path d="M11 34h10l4-10 6 20 5-14 3 4h5c3 0 4-4 6-4s3 4 5 4" fill="none" stroke="#fff" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <!-- 3 Night lens -->
+    <symbol id="m3" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="#111216"/><circle cx="32" cy="32" r="21" fill="none" stroke="#c8102e" stroke-opacity=".35" stroke-width="2"/><circle cx="32" cy="32" r="14" fill="none" stroke="#c8102e" stroke-opacity=".65" stroke-width="2.5"/><circle cx="32" cy="32" r="12" fill="url(#glow)"/><circle cx="32" cy="32" r="5" fill="#ff5a68"/></symbol>
+    <!-- 4 Spectrum bars -->
+    <symbol id="m4" viewBox="0 0 64 64"><rect x="8" y="34" width="9" height="22" rx="4.5" fill="#3a3c42"/><rect x="21.5" y="24" width="9" height="32" rx="4.5" fill="#6b3a44"/><rect x="35" y="15" width="9" height="41" rx="4.5" fill="#9c2236"/><rect x="48.5" y="6" width="9" height="50" rx="4.5" fill="#c8102e"/></symbol>
+    <!-- 5 Beam cross -->
+    <symbol id="m5" viewBox="0 0 64 64"><rect x="25" y="6" width="14" height="52" rx="4" fill="#c8102e"/><rect x="6" y="25" width="19" height="14" rx="4" fill="#c8102e"/><rect x="39" y="25" width="22" height="14" fill="url(#beam)"/><rect x="39" y="25" width="6" height="14" fill="#c8102e"/></symbol>
+    <!-- 6 Dot i -->
+    <symbol id="m6" viewBox="0 0 64 64"><rect x="3" y="3" width="58" height="58" rx="15" fill="#111216"/><rect x="26" y="27" width="12" height="27" rx="4" fill="#fff"/><circle cx="32" cy="16" r="10" fill="url(#glow)"/><circle cx="32" cy="16" r="5.5" fill="#ff5a68"/></symbol>
+  </defs>
+</svg>
+
+<div class="grid" id="grid"></div>
+<script>
+const L=[
+ ["m1","Ring monogram","The current mark, redrawn","Same red ring and iR you have now, rebuilt in the new type so it matches every title. The safest choice: nothing to relearn."],
+ ["m2","Signal","A pulse that turns into a wave","A heartbeat line that settles into a long wave, the shape of infrared light. It reads as medicine and data at once."],
+ ["m3","Night lens","Seeing in the dark","A red heat spot glowing on black, like a thermal camera picking up what the eye can’t. Straight from the tagline."],
+ ["m4","Spectrum","Dark to infrared","Four rising bars running from charcoal to red: a chart, and the light spectrum ending at infrared. Feels like a data tool."],
+ ["m5","Beam cross","A medical cross that shines","A plain medical cross with one arm fading out like a beam of light. Clearly medical, with a nod to “infrared”."],
+ ["m6","Glowing i","One dot that does the work","A lowercase i whose dot glows red on black. Very minimal, and works as an app icon on its own."],
+];
+const use=(id,c)=>`<svg ${c?`class="${c}"`:""} viewBox="0 0 64 64"><use href="#${id}"/></svg>`;
+document.getElementById("grid").innerHTML=L.map(([id,n,t,d],i)=>`<section class="card">
+ <div class="top">${use(id,"big")}<div><p class="name">${i+1} · ${n}</p><p class="title">${t}</p><p class="desc">${d}</p></div></div>
+ <div class="lock">${use(id)}<span class="word">Project <b>Infrared</b></span></div>
+ <div class="lock dark">${use(id)}<span class="word">Project <b>Infrared</b></span></div>
+ <div class="sizes"><span class="tab"><svg width="16" height="16" viewBox="0 0 64 64"><use href="#${id}"/></svg>Project Infrared</span><svg width="32" height="32" viewBox="0 0 64 64"><use href="#${id}"/></svg><svg width="20" height="20" viewBox="0 0 64 64"><use href="#${id}"/></svg><span>Tab, 32 px and 20 px</span></div>
+</section>`).join("");
+</script>
+</body></html>

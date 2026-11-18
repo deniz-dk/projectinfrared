@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;box-sizing:border-box}body{background:#000}
+#o{position:relative;width:1024px;height:1024px;overflow:hidden;background:radial-gradient(70% 70% at 50% 50%,#140708 0%,#070304 70%,#020101 100%)}
+.l{position:absolute;inset:0}
+.grid,.logo,.sweep{position:absolute;left:50%;top:50%;width:900px;height:900px;transform:translate(-50%,-50%)}
+.sweep{width:830px;height:830px;border-radius:50%;background:conic-gradient(from 0deg,rgba(255,40,70,0) 0deg,rgba(255,40,70,0) 250deg,rgba(255,40,70,.05) 290deg,rgba(255,50,80,.16) 340deg,rgba(255,90,110,.26) 358.6deg,rgba(255,170,185,.7) 359.6deg,rgba(255,40,70,0) 360deg);
+ transform:translate(-50%,-50%) rotate(52deg);mix-blend-mode:screen}
+.logo{-webkit-mask-image:conic-gradient(from 52deg,rgba(0,0,0,.78) 0deg,rgba(0,0,0,.8) 200deg,rgba(0,0,0,.92) 300deg,#000 359deg,rgba(0,0,0,.78) 360deg)}
+.scan{background:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0 3px,rgba(0,0,0,.42) 3px 5px)}
+.vig{background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,0) 78%,rgba(0,0,0,.85) 100%)}
+.glass{background:radial-gradient(55% 32% at 36% 14%,rgba(255,235,238,.08),rgba(255,255,255,0) 70%)}
+.bloom{background:radial-gradient(circle at 50% 50%,rgba(255,40,70,.09),rgba(255,40,70,0) 42%)}
+</style></head><body>
+<div id="o">
+ <div class="l bloom"></div>
+ <svg class="grid" viewBox="0 0 64 64" id="grid"></svg>
+ <div class="sweep"></div>
+ <svg class="logo" viewBox="0 0 64 64" overflow="visible">
+  <defs><filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+   <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b3"/>
+   <feGaussianBlur in="SourceGraphic" stdDeviation="1.1" result="b2"/>
+   <feGaussianBlur in="SourceGraphic" stdDeviation=".3" result="b1"/>
+   <feComponentTransfer in="b3" result="b3"><feFuncA type="linear" slope=".7"/></feComponentTransfer><feMerge><feMergeNode in="b3"/><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <radialGradient id="ph" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff6a7d"/><stop offset="1" stop-color="#ff2446"/></radialGradient></defs>
+  <g filter="url(#glow)">
+   <circle cx="32" cy="32" r="22.5" fill="none" stroke="url(#ph)" stroke-width="4.4"/>
+   <text x="32" y="40.3" text-anchor="middle" font-family="Archivo" font-weight="850" style="font-stretch:112%" font-size="21.5" fill="url(#ph)" stroke="url(#ph)" stroke-width=".35" stroke-linejoin="round">iR</text>
+  </g>
+  <g opacity=".35"><circle cx="32" cy="32" r="22.5" fill="none" stroke="#ffd9de" stroke-width="1"/>
+   <text x="32" y="40.3" text-anchor="middle" font-family="Archivo" font-weight="850" style="font-stretch:112%" font-size="21.5" fill="none" stroke="#ffd9de" stroke-width=".25">iR</text></g>
+ </svg>
+ <div class="l scan"></div><div class="l glass"></div><div class="l vig"></div>
+</div>
+<script>
+let g='';const c='rgba(255,60,85,';
+[29.5].forEach(r=>g+=`<circle cx="32" cy="32" r="${r}" fill="none" stroke="${c}.45)" stroke-width=".35"/>`);
+[8,15.5].forEach(r=>g+=`<circle cx="32" cy="32" r="${r}" fill="none" stroke="${c}.16)" stroke-width=".22"/>`);
+g+=`<line x1="32" y1="2.5" x2="32" y2="61.5" stroke="${c}.14)" stroke-width=".2"/><line x1="2.5" y1="32" x2="61.5" y2="32" stroke="${c}.14)" stroke-width=".2"/>`;
+for(let a=0;a<360;a+=5){const R=29.5,L=a%30?0.9:2,t=a*Math.PI/180,x1=32+R*Math.sin(t),y1=32-R*Math.cos(t),x2=32+(R-L)*Math.sin(t),y2=32-(R-L)*Math.cos(t);g+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}${a%30?.3:.55})" stroke-width="${a%30?.18:.3}"/>`}
+[[44,16,.9],[18,46,.6],[50,41,.5]].forEach(([x,y,o])=>g+=`<circle cx="${x}" cy="${y}" r=".55" fill="${c}${o})"/><circle cx="${x}" cy="${y}" r="1.6" fill="${c}${o*.25})"/>`);
+document.getElementById('grid').innerHTML=g;
+</script></body></html>

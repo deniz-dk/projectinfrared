@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logo Drafts 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Semi+Condensed:wght@700;800;900&family=Sofia+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#c8102e;--ink:#141416;--muted:#5e6168;--line:#e2e2e6;--bg:#f4f4f5;--card:#fff;--night:#111216}
+*{box-sizing:border-box}
+body{margin:0;padding:40px 32px 56px;background:var(--bg);color:var(--ink);font:16px/1.5 "Sofia Sans",system-ui,sans-serif}
+h1{font:800 44px/1 "Sofia Sans Semi Condensed",sans-serif;letter-spacing:-.025em;margin:0 0 8px}
+.lede{color:var(--muted);margin:0 0 28px;max-width:680px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.top{display:flex;align-items:center;gap:22px;padding:24px}
+.top svg.big{width:128px;height:128px;flex:none}
+.name{font:800 13px/1 "Sofia Sans Semi Condensed";letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin:0 0 6px}
+.title{font:800 26px/1.05 "Sofia Sans Semi Condensed";letter-spacing:-.01em;margin:0 0 6px}
+.desc{color:var(--muted);font-size:14.5px;margin:0}
+.lock{display:flex;align-items:center;gap:12px;padding:16px 24px;border-top:1px solid var(--line)}
+.lock svg{width:46px;height:46px;flex:none}
+.word{font:800 30px/1 "Sofia Sans Semi Condensed";letter-spacing:-.02em}
+.dark{background:var(--night);color:#fff;border-top:0}
+.sizes{display:flex;align-items:center;gap:14px;padding:12px 24px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.tab{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:8px 8px 0 0;padding:6px 10px;font-size:12px;color:var(--ink)}
+</style></head><body>
+<h1>Project Infrared Logo Drafts, Round 2</h1>
+<p class="lede">More depth and shine, and the letters now fill most of each mark. All set in the site’s title font.</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- shared -->
+  <filter id="drop" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2.2" stdDeviation="1.8" flood-color="#000" flood-opacity=".35"/></filter>
+  <filter id="emboss" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="1.6" stdDeviation=".6" flood-color="#5a0010" flood-opacity=".8"/><feDropShadow dx="0" dy="-.6" stdDeviation=".3" flood-color="#fff" flood-opacity=".35"/></filter>
+  <filter id="neon" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="glowsoft" x="-100%" y="-100%" width="300%" height="300%" filterUnits="objectBoundingBox"><feGaussianBlur stdDeviation="4"/></filter>
+  <filter id="engrave"><feDropShadow dx="0" dy="-1" stdDeviation=".4" flood-color="#000" flood-opacity=".45"/><feDropShadow dx="0" dy="1" stdDeviation=".3" flood-color="#fff" flood-opacity=".7"/></filter>
+
+  <radialGradient id="ruby" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="#ff5468"/><stop offset=".45" stop-color="#d4122f"/><stop offset="1" stop-color="#7a0718"/></radialGradient>
+  <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#b9bcc4"/><stop offset=".55" stop-color="#8d9099"/><stop offset="1" stop-color="#e9eaee"/></linearGradient>
+  <linearGradient id="silverText" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#d9dbe1"/><stop offset=".52" stop-color="#a9acb5"/><stop offset="1" stop-color="#f2f3f6"/></linearGradient>
+  <radialGradient id="glass" cx="40%" cy="30%" r="85%"><stop offset="0" stop-color="#3a3d46"/><stop offset=".55" stop-color="#15161b"/><stop offset="1" stop-color="#050506"/></radialGradient>
+  <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef2a45"/><stop offset=".55" stop-color="#c8102e"/><stop offset="1" stop-color="#8e0a21"/></linearGradient>
+  <linearGradient id="longshadow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a0010" stop-opacity=".55"/><stop offset="1" stop-color="#5a0010" stop-opacity="0"/></linearGradient>
+  <linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f5f7"/><stop offset=".3" stop-color="#c9ccd3"/><stop offset=".5" stop-color="#eef0f3"/><stop offset=".7" stop-color="#b3b6be"/><stop offset="1" stop-color="#dfe1e6"/></linearGradient>
+  <linearGradient id="enamel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e01b38"/><stop offset="1" stop-color="#a50c25"/></linearGradient>
+  <radialGradient id="brick" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#2a1216"/><stop offset="1" stop-color="#0c0a0b"/></radialGradient>
+
+  <!-- 1 Ruby button: glossy domed red button, embossed white iR -->
+  <symbol id="m1" viewBox="0 0 64 64">
+    <circle cx="32" cy="33.5" r="29" fill="#000" opacity=".18" filter="url(#glowsoft)"/>
+    <circle cx="32" cy="32" r="29.5" fill="#6d0616"/>
+    <circle cx="32" cy="31" r="28" fill="url(#ruby)"/>
+    <text x="32" y="44.5" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="900" font-size="37" letter-spacing="-1.5" fill="#fff" filter="url(#emboss)">iR</text>
+    <path d="M10 26 A22 20 0 0 1 54 26 C46 21 18 21 10 26Z" fill="url(#gloss)" opacity=".85"/>
+  </symbol>
+
+  <!-- 2 Night glass: black glass orb, red glowing iR inside -->
+  <symbol id="m2" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="url(#rim)"/>
+    <circle cx="32" cy="32" r="27" fill="url(#glass)"/>
+    <text x="32" y="44" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="900" font-size="35" letter-spacing="-1.5" fill="#ff3049" filter="url(#neon)">iR</text>
+    <ellipse cx="25" cy="15" rx="14" ry="6" fill="url(#gloss)" opacity=".5" transform="rotate(-18 25 15)"/>
+  </symbol>
+
+  <!-- 3 Enamel pin: silver bezel, red enamel, raised silver IR -->
+  <symbol id="m3" viewBox="0 0 64 64">
+    <rect x="3" y="4.5" width="58" height="58" rx="16" fill="#000" opacity=".2" filter="url(#glowsoft)"/>
+    <rect x="3" y="3" width="58" height="58" rx="16" fill="url(#rim)"/>
+    <rect x="7" y="7" width="50" height="50" rx="12.5" fill="url(#enamel)"/>
+    <rect x="7" y="7" width="50" height="22" rx="12.5" fill="url(#gloss)" opacity=".28"/>
+    <text x="32" y="45.5" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="900" font-size="36" letter-spacing="-1" fill="url(#silverText)" stroke="#7d0a1d" stroke-width=".6" filter="url(#drop)">iR</text>
+  </symbol>
+
+  <!-- 4 App tile: glossy red squircle, big IR with a long shadow -->
+  <symbol id="m4" viewBox="0 0 64 64">
+    <clipPath id="tc"><rect x="3" y="3" width="58" height="58" rx="15"/></clipPath>
+    <rect x="3" y="3" width="58" height="58" rx="15" fill="url(#tile)"/>
+    <g clip-path="url(#tc)"><path d="M14 46 L28 46 L48 66 L34 66Z M30 46 L52 46 L72 66 L50 66Z M14 18 L20 18 L66 64 L60 64Z" fill="url(#longshadow)"/></g>
+    <text x="31" y="47" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="900" font-size="40" letter-spacing="-1.5" fill="#fff" filter="url(#drop)">IR</text>
+    <rect x="3" y="3" width="58" height="26" rx="15" fill="url(#gloss)" opacity=".32" clip-path="url(#tc)"/>
+    <rect x="3.5" y="3.5" width="57" height="57" rx="14.5" fill="none" stroke="#fff" stroke-opacity=".25"/>
+  </symbol>
+
+  <!-- 5 Neon sign: red neon iR tubes on a dark backing plate -->
+  <symbol id="m5" viewBox="0 0 64 64">
+    <rect x="3" y="3" width="58" height="58" rx="14" fill="url(#brick)"/>
+    <rect x="3.5" y="3.5" width="57" height="57" rx="13.5" fill="none" stroke="#3a2a2d"/>
+    <circle cx="32" cy="32" r="20" fill="#c8102e" opacity=".35" filter="url(#glowsoft)"/>
+    <text x="32" y="44" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="800" font-size="36" letter-spacing="-.5" fill="none" stroke="#ff2d46" stroke-width="3.2" stroke-linejoin="round" filter="url(#neon)">iR</text>
+    <text x="32" y="44" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="800" font-size="36" letter-spacing="-.5" fill="none" stroke="#ffd6db" stroke-width="1" stroke-linejoin="round">iR</text>
+  </symbol>
+
+  <!-- 6 Steel coin: brushed metal disc, engraved red iR -->
+  <symbol id="m6" viewBox="0 0 64 64">
+    <circle cx="32" cy="33.5" r="29" fill="#000" opacity=".2" filter="url(#glowsoft)"/>
+    <circle cx="32" cy="32" r="29.5" fill="url(#steel)"/>
+    <circle cx="32" cy="32" r="25" fill="none" stroke="#9fa3ab" stroke-width="1"/>
+    <circle cx="32" cy="32" r="24.2" fill="none" stroke="#fff" stroke-width=".8" opacity=".8"/>
+    <text x="32" y="44.5" text-anchor="middle" font-family="Sofia Sans Semi Condensed" font-weight="900" font-size="36" letter-spacing="-1.5" fill="#c8102e" filter="url(#engrave)">iR</text>
+  </symbol>
+</defs></svg>
+
+<div class="grid" id="grid"></div>
+<script>
+const L=[
+ ["m1","Ruby button","A glossy red button you want to press","A domed, polished red button with a big embossed white iR and a shine across the top. Bold and friendly, and the closest to what you have now."],
+ ["m2","Night glass","Infrared glowing behind dark glass","A black glass lens in a silver ring, with the letters glowing red inside it, like a readout seen through night vision."],
+ ["m3","Enamel pin","Feels like a badge you’d earn","Red enamel set in a polished silver frame, with raised silver letters. Looks like a lapel pin or a school crest."],
+ ["m4","App tile","Built to sit on a home screen","A shiny red tile with chunky capital IR and long shadows falling off the letters. The most app-like of the set."],
+ ["m5","Neon sign","Lit up in the dark","Red neon tubes spelling iR on a dark backing plate, with a warm glow behind. Nods to seeing in the dark, with some nightlife energy."],
+ ["m6","Steel coin","Stamped in metal","A brushed steel disc with the letters engraved in red. Serious and premium, like a medal or a seal."],
+];
+const use=(id,c)=>`<svg ${c?`class="${c}"`:""} viewBox="0 0 64 64"><use href="#${id}"/></svg>`;
+document.getElementById("grid").innerHTML=L.map(([id,n,t,d],i)=>`<section class="card">
+ <div class="top">${use(id,"big")}<div><p class="name">${i+1} · ${n}</p><p class="title">${t}</p><p class="desc">${d}</p></div></div>
+ <div class="lock">${use(id)}<span class="word">Project Infrared</span></div>
+ <div class="lock dark">${use(id)}<span class="word">Project Infrared</span></div>
+ <div class="sizes"><span class="tab"><svg width="16" height="16" viewBox="0 0 64 64"><use href="#${id}"/></svg>Project Infrared</span><svg width="32" height="32" viewBox="0 0 64 64"><use href="#${id}"/></svg><svg width="20" height="20" viewBox="0 0 64 64"><use href="#${id}"/></svg><span>Tab, 32 px and 20 px</span></div>
+</section>`).join("");
+</script>
+</body></html>
