@@ -396,6 +396,8 @@ function acctInit() {
   Acct.sb.auth.getSession().then(({ data }) => {
     Acct.user = data.session ? data.session.user : null;
     acctBar();
+    Acct.known = true; // now we know whether someone is signed in
+    if (!Acct.user && hashParts()[0] === "account" && !flag && !urlErr) renderAccount(); // shows the log-in popup
     if (urlErr) {
       openAcct("msg", ["That link didn’t work", acctEsc(urlErr.replace(/\+/g, " ")) + ". Links expire after an hour and work once; request a new one if you need to."]);
     } else if (flag === "reset" && !handled) {

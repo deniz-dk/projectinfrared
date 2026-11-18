@@ -36,9 +36,12 @@ function renderAccount() {
     main.innerHTML = `<p class="crumb"><a href="#home">Home</a> / Profile</p>
     <section class="hubout"><div><p class="qzkicker">Profile</p><h1>Your profile</h1>
     <p class="hubouttext">Log in to see your quiz results, favorites, notes, tiers and replies to your feedback. A free account keeps them on every device.</p>
-    <div class="hubrow"><button type="button" class="btn" data-hub="login">Log in</button><button type="button" class="tbtn" data-hub="signup">Create a free account</button></div></div>
+    <div class="hubrow"><button type="button" class="btn" data-hub="login">Log in or create an account</button></div></div>
     <ul class="huboutlist">${[["compass", "Specialty match quiz"], ["trophy", "Top picks"], ["star", "Favorites and notes"], ["sliders", "Your own tiers"]].map(([i, t]) => `<li>${hsvg(i)}<span>${t}</span></li>`).join("")}</ul></section>`;
-    main.querySelectorAll("[data-hub]").forEach((b) => (b.onclick = () => openAcct(b.dataset.hub)));
+    main.querySelectorAll("[data-hub]").forEach((b) => (b.onclick = () => openAcct(b.dataset.hub, "Log in to open your Infrared Dashboard.")));
+    // Links from emails land here: open the log-in popup straight away (once we know nobody is signed in)
+    const dlg = document.getElementById("acctdlg");
+    if (Acct.known && !(dlg && dlg.open)) openAcct("login", "Log in to open your Infrared Dashboard.");
     return;
   }
   const P = Acct.prefs;
