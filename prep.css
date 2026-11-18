@@ -142,3 +142,7 @@
 .hubprep,.prephero{border:1px solid #0b0b0d;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hubprep,:root:not([data-theme="light"]) .prephero{border-color:rgba(255,74,92,.32);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 0 1px rgba(255,255,255,.03),0 10px 30px -18px rgba(255,74,92,.45)}}
 :root[data-theme="dark"] .hubprep,:root[data-theme="dark"] .prephero{border-color:rgba(255,74,92,.32);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 10px 30px -18px rgba(255,74,92,.45)}
+/* Both columns end level: the shorter column's last card stretches to meet the taller one */
+.prepgrid{align-items:stretch}
+.prepcol>:last-child{flex:1 1 auto}
+.prepempty{max-width:none!important;width:100%;box-sizing:border-box}
