@@ -2827,6 +2827,12 @@ ul.qzmini{list-style:none;padding-left:0}
 .cmpgrid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
 @media (max-width: 860px) { .cmpgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cmpgrid .gc { padding: 12px; } .cmpgrid .gc b { font-size: 0.95rem; } .cmpgrid .gc span { font-size: 0.78rem; } }
 .wdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: 0; }
+.tierdots.tiers .on { color: #ff2d4a; animation: sglow 2.2s ease-in-out infinite; text-shadow: 0 0 4px rgba(255,45,74,.7), 0 0 10px rgba(255,45,74,.45); }
+.tierdots.tiers .on:nth-child(2) { animation-delay: .15s } .tierdots.tiers .on:nth-child(3) { animation-delay: .3s } .tierdots.tiers .on:nth-child(4) { animation-delay: .45s }
+@keyframes sglow { 0%,100% { text-shadow: 0 0 3px rgba(255,45,74,.55), 0 0 7px rgba(255,45,74,.3); } 50% { text-shadow: 0 0 6px rgba(255,45,74,.95), 0 0 16px rgba(255,45,74,.7), 0 0 26px rgba(255,74,92,.45); } }
+.tiername b.stier, b.stier { background: linear-gradient(90deg,#c8102e,#ff4a5c,#c8102e); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sshine 3s linear infinite; }
+@keyframes sshine { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .tierdots.tiers .on, b.stier { animation: none; } }
 .tierlist a { color: var(--ink); text-decoration: none; font-weight: 600; }
 .tierlist a:hover { color: var(--scrub); }
 .tierlist .mv.up { color: var(--scrub); font-weight: 700; }
@@ -10242,7 +10248,7 @@ const FOPINION = [
 const FDEGCIP = "The Royal College Clinician Investigator Program lets residents complete a master’s or PhD during residency, usually adding two or more years of protected research time.";
 /* Tooltip text for rating cards and the transparency card. */
 const TIPS = {
-  Tier: "Every specialty is scored from its star ratings and forecast, then split into quarters of about 11 specialties each: Tier 1 is the top quarter, Tier 4 the bottom. How the score is weighted:",
+  Tier: "Every specialty is scored from its star ratings and forecast, then split into quarters of about 11 specialties each: A Tier is the top quarter (four stars), then B, C and D. The five highest scores overall form the exclusive S Tier, shown with glowing stars. How the score is weighted:",
   Income: "The busy-year Ontario gross on the Income tab (CIHI’s 80th percentile, another published distribution, or an estimate) plus half of the listed private add-ons, since most physicians use only some of them. $1M+ = 5 stars, $750k = 4, $560k = 3, $450k = 2, below = 1. Gross, before overhead.",
   "Work-life balance": "Where CMA data exists, mostly hours: weekly hours excluding call count for half (48 or fewer = 5 stars, 51 = 4, 54 = 3, 58 = 2, more = 1), on-call hours in direct patient care for a quarter (3 or fewer = 5, 6 = 4, 10 = 3, 14 = 2) and the share satisfied with work-life balance for a quarter (58%+ = 5, 52% = 4, 46% = 3, 40% = 2), rounded to the nearest star. These are the same figures shown under Work-life balance on the Overview. Estimated otherwise, and capped at 4 stars so an estimate never outranks surveyed fields.",
   "Job market": "Where CAPER data exists: full-time job postings per 10 graduates (15+ = 5 stars, 10 = 4, 6 = 3, 3 = 2, fewer = 1), capped at 2 stars for fields the Royal College flagged for graduate unemployment. Estimated otherwise.",
@@ -11988,7 +11994,7 @@ function buildNav() {
         const b = document.createElement("button");
         b.className = "navitem";
         b.dataset.id = s.id;
-        const right = sortBy === "tier" || sortBy === "name" ? tierDots(tierOf(s.id)) : `<span class="navval" aria-label="${val(s)} of 5 stars">${val(s)}★</span>`;
+        const right = sortBy === "tier" || sortBy === "name" ? tierDots(tierOf(s.id), s.id) : `<span class="navval" aria-label="${val(s)} of 5 stars">${val(s)}★</span>`;
         b.innerHTML = `<span>${s.name}</span>${right}`;
         b.onclick = () => go(s.id);
         nav.appendChild(b);
@@ -12004,7 +12010,7 @@ function buildNav() {
       const b = document.createElement("button");
       b.className = "navitem";
       b.dataset.id = s.id;
-      b.innerHTML = `<span>${s.name}</span>${tierDots(tierOf(s.id))}`;
+      b.innerHTML = `<span>${s.name}</span>${tierDots(tierOf(s.id), s.id)}`;
       b.onclick = () => go(s.id);
       nav.appendChild(b);
     });
@@ -12565,8 +12571,18 @@ function tierScore(id) {
   return (TIERS[id] || {}).v || 0;
 }
 const GROUP_SHORT = { Surgical: "Surgical", "Medicine and Its Subspecialties": "Medicine", "Other Medical Specialties": "Medical", "Hospital-Based and Diagnostic": "Hospital", "Primary Care and Cross-Cutting": "Primary care" };
-const tierNum = (t) => 5 - t; // stored tiers run 1 (bottom) to 4 (top); shown as Tier 1 = top
-const tierDots = (t) => `<span class="tierdots" title="Tier ${5 - t} of 4" aria-label="Tier ${5 - t} of 4">${[1, 2, 3, 4].map((i) => `<span class="${i <= t ? "on" : "off"}">★</span>`).join("")}</span>`;
+const tierNum = (t) => 5 - t; // stored tiers run 1 (bottom) to 4 (top)
+// Letter tiers: 4 stars = A, 3 = B, 2 = C, 1 = D. The top 5 overall are an exclusive S tier (4 stars that glow).
+const isS = (id) => {
+  if (!TIERS) TIERS = tierRank(activeW());
+  return !!id && TIERS[id] && TIERS[id].k < 5;
+};
+const tierLetter = (t, id) => (isS(id) ? "S" : "DCBA"[t - 1] || "C");
+const tierName = (t, id) => tierLetter(t, id) + " Tier";
+const tierDots = (t, id) => {
+  const L = tierLetter(t, id);
+  return `<span class="tierdots${L === "S" ? " tiers" : ""}" title="${L} Tier" aria-label="${L} Tier">${[1, 2, 3, 4].map((i) => `<span class="${i <= t ? "on" : "off"}">★</span>`).join("")}</span>`;
+};
 function renderSpec(sp) {
   const hasSubs = (sp.subs || []).length > 0;
   const steps = ["Overview", "Residency", "Jobs", "Income", "US Option"].concat(hasSubs ? ["Subspecialties"] : []);
@@ -12579,7 +12595,7 @@ function renderSpec(sp) {
   }
   if (tab >= steps.length) tab = 0;
   $("#main").innerHTML =
-    `<p class="crumb"><a href="#home">Home</a> / ${sp.group}</p><h1>${sp.name}</h1><p class="specmeta"><span class="tiername tierlite" data-tipkey="Tier">${tierDots(tierOf(sp.id))}<b>${tierNum(tierOf(sp.id)) === 1 ? "Top tier" : "Tier " + tierNum(tierOf(sp.id))}</b></span><span aria-hidden="true">·</span><span>${GROUP_SHORT[sp.group] || sp.group}</span><span aria-hidden="true">·</span><span>${RESIDENCIES.includes(sp.id) ? "Direct entry" : IM_SUBS.includes(sp.id) ? "After IM" : "After residency"}</span></p><p class="lede">${sp.summary}</p>${statRow(sp)}
+    `<p class="crumb"><a href="#home">Home</a> / ${sp.group}</p><h1>${sp.name}</h1><p class="specmeta"><span class="tiername tierlite" data-tipkey="Tier">${tierDots(tierOf(sp.id), sp.id)}<b class="${isS(sp.id) ? "stier" : ""}">${tierName(tierOf(sp.id), sp.id)}</b></span><span aria-hidden="true">·</span><span>${GROUP_SHORT[sp.group] || sp.group}</span><span aria-hidden="true">·</span><span>${RESIDENCIES.includes(sp.id) ? "Direct entry" : IM_SUBS.includes(sp.id) ? "After IM" : "After residency"}</span></p><p class="lede">${sp.summary}</p>${statRow(sp)}
   <div class="pathanchor"></div><div class="pathwrap"><div class="path" role="tablist">${steps.map((s, i) => `<button role="tab" aria-selected="${i === tab}" data-t="${i}">${s}</button>`).join("")}</div></div>
   <div class="panel" role="tabpanel">${panels[tab](sp)}</div>`;
   TABPEEK = (k) => panels[k](sp);
@@ -16006,7 +16022,7 @@ const vsShort = (n) => {
 };
 const VS_ROWS = [
   ["Overall", [
-    ["Tier", "From the weighted star ratings", (s) => tierScore(s.id), (s) => `<b>Tier ${tierNum(tierOf(s.id))}</b> ${tierDots(tierOf(s.id))}`, 1, "none"],
+    ["Tier", "From the weighted star ratings", (s) => tierScore(s.id), (s) => `<b>${tierName(tierOf(s.id), s.id)}</b> ${tierDots(tierOf(s.id), s.id)}`, 1, "none"],
   ]],
   ["Ratings", [
     ["Income", "", (s) => (OV[s.id] || {}).r?.[0], (s) => stars((OV[s.id] || {}).r?.[0] || 0), 1, "none"],
@@ -16091,7 +16107,7 @@ function renderVs(ids) {
   const head = `<div class="vsgrid vshead"><div class="vscorner">${ok ? "Pick a column’s name to swap it" : ""}</div>${sps
     .map(
       (s, i) => `<div class="vscol"><div class="vstop"><label class="vsname"><span class="vsfull">${s.name.replace(/(\w{4,})(logy)\b/g, "$1\u00AD$2")}</span><span class="vsshort">${vsShort(s.name).replace(/(\w{4,})(logy)\b/g, "$1\u00AD$2")}</span><svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1.5 1.5 6 6l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><select data-slot="${i}" aria-label="Change ${s.name}">${opts(s.id, "Remove from comparison")}</select></label><button type="button" class="vsrm" data-rm="${s.id}" aria-label="Remove ${s.name}" title="Remove">✕</button></div>
-      <div class="vsmeta">${tierDots(tierOf(s.id))}<a href="#${s.id}">Open<span class="vslong"> page</span> →</a><button type="button" class="vsrm2" data-rm="${s.id}">Remove</button></div>${ok ? `<div class="vswins${wins[i] ? "" : " zero"}">${wins[i] ? `Best in ${wins[i]}<span class="vslong"> of ${counted}</span>` : "No wins"}</div>` : ""}</div>`,
+      <div class="vsmeta">${tierDots(tierOf(s.id), s.id)}<a href="#${s.id}">Open<span class="vslong"> page</span> →</a><button type="button" class="vsrm2" data-rm="${s.id}">Remove</button></div>${ok ? `<div class="vswins${wins[i] ? "" : " zero"}">${wins[i] ? `Best in ${wins[i]}<span class="vslong"> of ${counted}</span>` : "No wins"}</div>` : ""}</div>`,
     )
     .join("")}${sps.length < 4 ? `<div class="vscol vsadd"><select data-slot="${sps.length}" aria-label="Add a specialty">${opts("", "+ Add specialty")}</select></div>` : ""}</div>`;
   let diffOn = false;

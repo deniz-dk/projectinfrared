@@ -55,7 +55,7 @@ function renderAccount() {
     const L = slLabel(k);
     return L ? `${acctEsc(L.name)}${L.parent ? `<small>${acctEsc(L.parent)}</small>` : ""}` : acctEsc(k);
   };
-  const tierOfKey = (k) => (S.find((x) => x.id === k) ? tierDots(tierOf(k)) : `<span class="hubtag">Fellowship</span>`);
+  const tierOfKey = (k) => (S.find((x) => x.id === k) ? tierDots(tierOf(k), k) : `<span class="hubtag">Fellowship</span>`);
 
   // --- profile header
   const head = `<div class="hubcard hubhead"><svg class="hubdeco" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="88"/><circle cx="100" cy="100" r="62"/><circle cx="100" cy="100" r="36"/></svg><button type="button" class="hublogout" data-hub-logout>Log out</button>

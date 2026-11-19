@@ -217,7 +217,7 @@ function acctPerks(invite) {
     <div class="perkart" aria-hidden="true">
       <div class="perkcard pc1">${ring(94, 44)}<span class="pbars"><i></i><i></i></span></div>
       <div class="perkcard pc2">${ring(88, 38)}<span class="pbars"><i></i><i></i></span></div>
-      <div class="perkchip c1">★ Favorites</div><div class="perkchip c2">Tier 1</div>
+      <div class="perkchip c1">★ Favorites</div><div class="perkchip c2">S Tier</div>
     </div>
     <ul class="perklist">${P.map(([i, t, d]) => `<li><span class="perkico">${hsvg(i)}</span><span><b>${t}</b><small>${d}</small></span></li>`).join("")}</ul>
     ${invite ? `<div class="perkcta"><button type="button" class="perkgo" data-go="signup">Create a free account</button><button type="button" class="perklater" data-close>Maybe later</button><p class="perkfine">Free, takes 30 seconds. Already have one? <button type="button" data-go="login">Log in</button></p></div>` : ""}
