@@ -429,7 +429,18 @@ function emailCard() {
     ${hubSw("remind", on && applying && P.remind !== false, "CaRMS deadline reminders", applying ? "A week before and the day before each deadline, and the day before interviews you’ve saved" : "Turn on Preparing for CaRMS in Settings first", !on || !applying)}
     ${hubSw("changes", on && N.changes !== false, "Sunday newsletter", "Sunday mornings: news, opportunities and page changes for the specialties you’ve starred", !on)}
     ${hubSw("news", on && !!N.news, "Site news", "New features and big data updates, a few times a year", !on)}
-  </div></section>`;
+  </div>
+  ${on && N.changes !== false ? nlPicker(N) : ""}</section>`;
+}
+// Choose what the Sunday newsletter covers: topics and favorite specialties. Nothing picked means everything.
+const NL_TOPICS = [["pay", "Pay"], ["match", "Match"], ["policy", "Policy"], ["jobs", "Jobs"], ["opportunity", "Opportunities"], ["research", "Research"], ["tech", "Technology"], ["politics", "Politics"], ["business", "Business & tax"], ["trend", "Trends"]];
+function nlPicker(N) {
+  const T = N.topics || [], F = N.specs || [], favs = shortlist();
+  const chip = (attr, v, label, on) => `<button type="button" class="nfchip${on ? " on" : ""}" ${attr}="${acctEsc(v)}" aria-pressed="${on}">${label}</button>`;
+  return `<div class="nlpick"><h3>What the Sunday newsletter covers</h3>
+    <p class="hubsub">Pick what you want emails about. Leave a row on <b>All</b> to get everything in it.</p>
+    <div class="nfrow"><span class="nflab">Topics</span>${chip("data-nlt", "", "All", !T.length)}${NL_TOPICS.map(([k, l]) => chip("data-nlt", k, `<i class="nfdot k-${k}"></i>${l}`, T.includes(k))).join("")}</div>
+    <div class="nfrow"><span class="nflab">Specialties</span>${favs.length ? chip("data-nls", "", "All favorites", !F.length) + chip("data-nls", "_all", "Across medicine", F.includes("_all")) + favs.map((k) => { const L = slLabel(k); return chip("data-nls", k, acctEsc(L ? L.name : k), F.includes(k)); }).join("") : `<span class="hubsub">Star specialties to choose them here.</span>`}</div></div>`;
 }
 function emailNudge() {
   if (emailOn()) return "";
@@ -467,6 +478,17 @@ function wireSettings(main) {
       redraw();
     };
   });
+  main.querySelectorAll("[data-nlt],[data-nls]").forEach(
+    (b) =>
+      (b.onclick = () => {
+        const key = b.hasAttribute("data-nlt") ? "topics" : "specs";
+        const v = b.getAttribute(key === "topics" ? "data-nlt" : "data-nls");
+        let list = P.notify[key] || [];
+        list = !v ? [] : list.includes(v) ? list.filter((x) => x !== v) : list.concat(v);
+        P.notify[key] = list;
+        redraw();
+      }),
+  );
   const r = main.querySelector('[data-set="remind"]');
   if (r && P.applying === false) r.disabled = true;
 }

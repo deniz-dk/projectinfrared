@@ -450,3 +450,6 @@ input:autofill{background:var(--bg)!important;color:var(--ink)!important}
 .perklater:hover{background:rgba(255,255,255,.12)}
 .perkfine{margin:2px 0 0;font-size:.82rem;color:rgba(255,255,255,.85);text-align:center}
 .perkfine button{border:0;background:0 0;padding:0;font:inherit;font-weight:700;color:#fff;text-decoration:underline;cursor:pointer}
+.nlpick{margin-top:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--bg);display:flex;flex-direction:column;gap:10px}
+.nlpick h3{margin:0;font:700 .95rem var(--sans)}
+.nlpick .hubsub{margin:0}

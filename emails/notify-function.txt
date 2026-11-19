@@ -244,7 +244,13 @@ ${o.site.length ? sectionHead("On Project Infrared") + block(changesHtml(o.site,
 type Row = { user_id: string; prep: any; email_token: string; shortlist: string[]; username: string | null };
 function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
   const P = r.prep || {}, N = P.notify || {};
-  const favs = (Array.isArray(r.shortlist) ? r.shortlist : []).filter((k) => NAMES[k]);
+  // The member's newsletter choices (Notifications tab): empty lists mean everything
+  const wantT: string[] = Array.isArray(N.topics) ? N.topics : [];
+  const wantS: string[] = Array.isArray(N.specs) ? N.specs : [];
+  const okKind = (k: string) => !wantT.length || wantT.includes(k);
+  const allFavs = (Array.isArray(r.shortlist) ? r.shortlist : []).filter((k) => NAMES[k]);
+  const favs = wantS.filter((k) => k !== "_all").length ? allFavs.filter((k) => wantS.includes(k)) : wantS.length ? [] : allFavs;
+  W = { news: W.news.filter((x) => okKind(x.kind)), upd: W.upd };
   const used = new Set<string>();
   let nStories = 0, nChanges = 0;
   const withNews: string[] = [];
@@ -262,7 +268,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
       return sectionHead(NAMES[f], cnt) + `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${changesHtml(ch)}${st.map((x) => storyHtml(x)).join("")}${pageBtn(pageHref(f), all.length > 3 ? `See all ${all.length} on the page →` : `Read more on the page →`)}</table></td></tr>`;
     })
     .join("");
-  const top = W.news.filter((x) => (x.top || !(x.specs || []).length) && !used.has(x.id)).sort((a, b) => Number(b.top) - Number(a.top)).slice(0, favs.length ? 4 : 6); // big stories and news for all of medicine
+  const top = (wantS.length && !wantS.includes("_all") ? [] : W.news).filter((x) => (x.top || !(x.specs || []).length) && !used.has(x.id)).sort((a, b) => Number(b.top) - Number(a.top)).slice(0, favs.length ? 4 : 6); // big stories and news for all of medicine
   const site = N.news ? W.upd.filter((u) => u.kind === "site") : [];
   if (!blocks && !top.length && !site.length) return null;
 
@@ -286,7 +292,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
   }
   const unsub = `${SELF}?u=${r.email_token}&t=weekly`;
   const dateLine = new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto", weekday: "long", month: "long", day: "numeric", year: "numeric" });
-  const html = weeklyHtml({ name: (r.username || "").trim(), dateLine, summary, favBlocks: blocks, top, site, deadline, noFavs: !favs.length, unsub });
+  const html = weeklyHtml({ name: (r.username || "").trim(), dateLine, summary, favBlocks: blocks, top, site, deadline, noFavs: !allFavs.length, unsub });
   const subject = "Project Infrared · The Sunday";
   return { html, subject, unsub };
 }
