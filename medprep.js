@@ -285,12 +285,12 @@ function medSchoolCards() {
     const evs = (s.sys === "OMSAS" ? medOmsas(cyc) : []).concat(medEvents(s, cyc)).sort((a, b) => a.d.localeCompare(b.d));
     const mtag = s.m === "y" ? "MCAT" : s.m === "cars" ? "MCAT (CARS)" : s.m === "n" ? "No MCAT" : "";
     return `<div class="medrow${on ? " on" : ""}"><label class="medpick"><input type="checkbox" data-medadd="${s.id}"${on ? " checked" : ""}><span class="sr">Add ${acctEsc(s.name)} to my schools</span></label>
-      <details><summary><span class="medname"><b>${acctEsc(s.name)}</b><small>${acctEsc(s.city)} · ${s.seats} seats</small></span>
+      <details><summary><span class="medname"><a class="medgo" href="#school-${s.id}" title="Open the ${acctEsc(s.short)} page">${acctEsc(s.name)}<span aria-hidden="true"> →</span></a><small>${acctEsc(s.city)} · ${s.seats} seats</small></span>
       <span class="meddue${medPast(mn) ? " past" : ""}"><b>${prepFmt(mn.d, { month: "short", day: "numeric", year: "numeric" })}</b><small>${medPast(mn) ? "Closed" : "Due " + medIn(mn)}${mn.est ? " · expected" : ""}</small></span>
       <span class="medtags">${mtag ? `<i class="${s.m === "n" ? "no" : ""}">${mtag}</i>` : ""}<i class="${s.c ? "" : "no"}">${s.c ? "Casper" : "No Casper"}</i></span></summary>
       <div class="medmore"><dl><dt>Apply through</dt><dd>${acctEsc(s.sys)}</dd><dt>Tests</dt><dd>${acctEsc(s.tests)}</dd><dt>Interview</dt><dd>${acctEsc(s.int)}</dd><dt>Who can apply</dt><dd>${acctEsc(s.who)}</dd></dl>
       <ol class="medmini">${evs.map((e) => `<li class="${medPast(e) ? "past" : ""}"><span>${medDate(e, { month: "short", day: "numeric", year: "numeric" })}</span><b>${acctEsc(e.t)}</b>${e.est && !est ? `<em class="medest">expected</em>` : ""}</li>`).join("")}</ol>
-      <a class="medlink" href="${s.url}" target="_blank" rel="noopener">${acctEsc(s.short)} admissions site ↗</a></div></details></div>`;
+      <span class="medlinks"><a class="medlink" href="#school-${s.id}">Full ${acctEsc(s.short)} guide: admissions, cost, city →</a><a class="medlink" href="${s.url}" target="_blank" rel="noopener">Admissions site ↗</a></span></div></details></div>`;
   };
   const all = `<section class="prepcard prepwide medall"><div class="prephead"><h2>Schools and deadlines</h2><span>${MED_SCHOOLS.length} programs · tick to add</span></div>${chips}
     ${provs
@@ -304,7 +304,7 @@ function medSchoolCards() {
   const trows = mineIds
     .map((id) => {
       const s = medSchool(id), me = M.mine[id], mn = medMain(s, cyc);
-      return `<tr data-medk="${id}"><td><b>${acctEsc(s.name)}</b><small>${acctEsc(s.sys)}</small></td>
+      return `<tr data-medk="${id}"><td><a class="medgo" href="#school-${id}"><b>${acctEsc(s.name)}</b></a><small>${acctEsc(s.sys)}</small></td>
       <td data-l="Deadline">${prepFmt(mn.d, { month: "short", day: "numeric" })}${mn.est ? "*" : ""}</td>
       <td data-l="Status"><select data-medst aria-label="Status">${MED_STATUS.map(([v, l]) => `<option value="${v}"${(me.st || "plan") === v ? " selected" : ""}>${l}</option>`).join("")}</select></td>
       <td data-l="Interview"><input type="date" data-meddate value="${me.date || ""}" aria-label="Interview date"></td>

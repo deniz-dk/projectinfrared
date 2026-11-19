@@ -66,3 +66,13 @@
   .medprovhead h3{font-size:1.2rem}
 }
 .medcegep{margin:-6px 0 14px;line-height:1.4}
+/* School pages and links to them */
+.medgo{color:var(--ink);text-decoration:none;font-weight:700}
+.medgo span{color:var(--scrub);font-weight:700}
+@media (hover:hover){.medgo:hover{color:var(--scrub)}}
+.medrow .medname .medgo{font-size:.95rem}
+.medlinks{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 18px}
+.mstools{display:flex;gap:8px}
+.mstools .ptool.on{background:var(--red-fill);color:#fff;border-color:transparent;box-shadow:var(--red-glow)}
+.medmini.mspage{margin:6px 0 16px}
+.medmini.mspage li{grid-template-columns:130px minmax(0,1fr)}
