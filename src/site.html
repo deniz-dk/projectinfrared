@@ -2828,9 +2828,9 @@ ul.qzmini{list-style:none;padding-left:0}
 @media (max-width: 860px) { .cmpgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cmpgrid .gc { padding: 12px; } .cmpgrid .gc b { font-size: 0.95rem; } .cmpgrid .gc span { font-size: 0.78rem; } }
 .wdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: 0; }
 /* S tier stars: the same moving red shine as the "S Tier" words, running as one band across all four stars */
-.tierdots.tiers { background: linear-gradient(90deg,#c8102e,#ff4a5c,#c8102e); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; animation: sshine 3s linear infinite; }
+.tierdots.tiers { background: linear-gradient(90deg,#c8102e 0%,#c8102e 30%,#ff5a6c 42%,#ffc2cb 50%,#ff5a6c 58%,#c8102e 70%,#c8102e 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; animation: sshine 3s linear infinite; }
 .tierdots.tiers .on { color: transparent; }
-.tiername b.stier, b.stier { background: linear-gradient(90deg,#c8102e,#ff4a5c,#c8102e); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sshine 3s linear infinite; }
+.tiername b.stier, b.stier { background: linear-gradient(90deg,#c8102e 0%,#c8102e 30%,#ff5a6c 42%,#ffc2cb 50%,#ff5a6c 58%,#c8102e 70%,#c8102e 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sshine 3s linear infinite; }
 @keyframes sshine { to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .tierdots.tiers, b.stier { animation: none; } }
 .tierlist a { color: var(--ink); text-decoration: none; font-weight: 600; }
