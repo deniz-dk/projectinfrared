@@ -2827,33 +2827,20 @@ ul.qzmini{list-style:none;padding-left:0}
 .cmpgrid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
 @media (max-width: 860px) { .cmpgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .cmpgrid .gc { padding: 12px; } .cmpgrid .gc b { font-size: 0.95rem; } .cmpgrid .gc span { font-size: 0.78rem; } }
 .wdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: 0; }
-/* S tier stars: a solid, lit-from-above red like the buttons (light top, deeper base), a crisp shadow so they sit
-   up off the page, a glint that sweeps across the row, and a small twinkle that catches each star in turn */
-.tierdots.tiers { gap: 2px; }
+/* S tier stars: same size as other stars, but polished: a bright highlight across the top fading to deep red,
+   a tight shadow so they sit up off the page, and a shine that sweeps across the row now and then */
 .tierdots.tiers .on {
-  position: relative;
   color: transparent;
-  background-image: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.95) 50%, transparent 62%), linear-gradient(180deg, #ff8090 0%, #ff3550 42%, #c8102e 100%);
+  background-image: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.9) 50%, transparent 60%), linear-gradient(180deg, #fff 0%, #ff8597 22%, #ff2d4a 48%, #e0112f 75%, #a50a24 100%);
   background-size: 300% 100%, 100% 100%;
   background-repeat: no-repeat;
   background-position: 130% 0, 0 0;
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 1px 0 rgba(90,0,14,.55)) drop-shadow(0 2px 2px rgba(0,0,0,.35)) drop-shadow(0 0 1.5px rgba(255,60,85,.35));
+  filter: drop-shadow(0 1px 0 rgba(150,0,25,.6)) saturate(1.15);
   animation: sglint 3.6s ease-in-out infinite;
 }
-.tierdots.tiers .on::after {
-  content: "\2726"; position: absolute; top: -.34em; right: -.3em; font-size: .52em; line-height: 1;
-  color: #fff; -webkit-text-fill-color: #fff; text-shadow: 0 0 3px rgba(255,255,255,.9), 0 0 6px rgba(255,90,110,.8);
-  opacity: 0; transform: scale(0) rotate(0deg); pointer-events: none;
-  animation: stwinkle 3.6s ease-in-out infinite;
-}
-.tierdots.tiers .on:nth-child(2), .tierdots.tiers .on:nth-child(2)::after { animation-delay: .12s }
-.tierdots.tiers .on:nth-child(3), .tierdots.tiers .on:nth-child(3)::after { animation-delay: .24s }
-.tierdots.tiers .on:nth-child(4), .tierdots.tiers .on:nth-child(4)::after { animation-delay: .36s }
-.tierdots.tiers .on:nth-child(1)::after { animation-delay: 1.6s } .tierdots.tiers .on:nth-child(2)::after { animation-delay: 2.5s }
-.tierdots.tiers .on:nth-child(3)::after { animation-delay: .7s } .tierdots.tiers .on:nth-child(4)::after { animation-delay: 3.1s }
+.tierdots.tiers .on:nth-child(2) { animation-delay: .12s } .tierdots.tiers .on:nth-child(3) { animation-delay: .24s } .tierdots.tiers .on:nth-child(4) { animation-delay: .36s }
 @keyframes sglint { 0% { background-position: 130% 0, 0 0; } 35%, 100% { background-position: -30% 0, 0 0; } }
-@keyframes stwinkle { 0%, 70%, 100% { opacity: 0; transform: scale(0) rotate(0deg); } 80% { opacity: 1; transform: scale(1) rotate(45deg); } 90% { opacity: 0; transform: scale(.3) rotate(90deg); } }
 /* On a red pill or row (hover, open), the stars turn bright white-silver with the same glint */
 .tiername:focus-visible .tierdots.tiers .on, .tiername.raised .tierdots.tiers .on, .tiername.open .tierdots.tiers .on {
   color: transparent; background-image: linear-gradient(105deg, transparent 38%, #fff 50%, transparent 62%), linear-gradient(180deg, #fff 0%, #ffe3e7 55%, #ffb3bd 100%);
@@ -2867,7 +2854,7 @@ ul.qzmini{list-style:none;padding-left:0}
 }
 .tiername b.stier, b.stier { background: linear-gradient(90deg,#c8102e,#ff4a5c,#c8102e); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sshine 3s linear infinite; }
 @keyframes sshine { to { background-position: -200% 0; } }
-@media (prefers-reduced-motion: reduce) { .tierdots.tiers .on, .tierdots.tiers .on::after, b.stier { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .tierdots.tiers .on, b.stier { animation: none; } }
 .tierlist a { color: var(--ink); text-decoration: none; font-weight: 600; }
 .tierlist a:hover { color: var(--scrub); }
 .tierlist .mv.up { color: var(--scrub); font-weight: 700; }
