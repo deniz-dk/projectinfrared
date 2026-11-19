@@ -53,6 +53,29 @@ function acctPush() {
   }, 500);
 }
 window.acctPush = acctPush;
+
+/* Invite new visitors to sign up after they've spent a while on specialty pages.
+   Only for people who have never signed in on this device, at most once every 14 days, never over another popup. */
+const INVITE_AFTER = 45; // seconds on specialty pages, added up across pages
+let inviteSecs = 0;
+function inviteTick() {
+  if (!Acct.on || !Acct.known || Acct.user || document.hidden) return;
+  let seen = {};
+  try {
+    seen = JSON.parse(localStorage.getItem("ir-invite") || "{}");
+    if (localStorage.getItem("ir-member")) return; // has signed in here before
+  } catch (e) {}
+  if (seen.at && Date.now() - seen.at < 14 * 864e5) return;
+  const id = hashParts()[0];
+  const onSpec = typeof S !== "undefined" && (S.some((x) => x.id === id) || /^sub-/.test(id));
+  if (!onSpec) return;
+  if (++inviteSecs < INVITE_AFTER) return;
+  const d = document.getElementById("acctdlg");
+  if (d && d.open) return;
+  try { localStorage.setItem("ir-invite", JSON.stringify({ at: Date.now() })); } catch (e) {}
+  openAcct("invite");
+}
+setInterval(inviteTick, 1000);
 async function acctPull() {
   Acct.pulling = true;
   try {
@@ -176,15 +199,16 @@ const VIEWS = {
     <p class="acctalt"><button type="button" data-resend>Send a new email</button> · <button type="button" data-go="signup">Use a different email</button></p>`,
   confirmlink: () => `<h2 id="accttitle">Confirm your email</h2><p class="acctnote">One more tap and your account is ready.</p>
     <form data-f="confirmlink"><p class="accterr" role="alert"></p><button class="btn acctgo" type="submit">Confirm my email</button></form>`,
+  invite: () => acctPerks(true),
   msg: (t) => `<h2 id="accttitle">${t[0]}</h2><p class="acctnote">${t[1]}</p><button type="button" class="btn acctgo" data-close>OK</button>`,
 };
 /* Left panel of the sign-up dialog: what an account unlocks */
-function acctPerks() {
+function acctPerks(invite) {
   const P = [
-    ["compass", "Specialty match quiz", "Your top five matches, why they fit, and the best fellowship in each. Members only."],
-    ["star", "Favorites and private notes", "Star specialties, rank your top picks and jot notes only you can see."],
-    ["sliders", "Your own tiers, saved", "Weight income, lifestyle and the rest your way. It follows you to any device."],
-    ["chat", "A direct line to us", "Flag a wrong number or suggest a source, and track what we fix."],
+    ["compass", "Specialty match quiz", "Your top five matches, why they fit, and the best fellowship in each."],
+    ["star", "Favorites, notes and your own tiers", "Star specialties, rank your picks and weight what matters to you."],
+    ["up", "Residency prep", "Your CaRMS timeline, checklist, programs and a draft rank list."],
+    ["chat", "My News and The Sunday", "News for your favorite specialties, and a weekly newsletter if you want it."],
   ];
   const ring = typeof qzRing === "function" ? qzRing : (p) => `<b>${p}%</b>`;
   return `<div class="acctperks" role="complementary" aria-label="What you get with an account">
@@ -196,6 +220,7 @@ function acctPerks() {
       <div class="perkchip c1">★ Favorites</div><div class="perkchip c2">Tier 1</div>
     </div>
     <ul class="perklist">${P.map(([i, t, d]) => `<li><span class="perkico">${hsvg(i)}</span><span><b>${t}</b><small>${d}</small></span></li>`).join("")}</ul>
+    ${invite ? `<div class="perkcta"><button type="button" class="perkgo" data-go="signup">Create a free account</button><button type="button" class="perklater" data-close>Maybe later</button><p class="perkfine">Free, takes 30 seconds. Already have one? <button type="button" data-go="login">Log in</button></p></div>` : ""}
   </div>`;
 }
 function openAcct(view, arg) {
@@ -204,6 +229,7 @@ function openAcct(view, arg) {
   }
   const d = acctDialog();
   d.classList.toggle("acctwide", view === "signup");
+  d.classList.toggle("acctinvite", view === "invite");
   d.querySelector(".acctbody").innerHTML = view === "signup" ? `<div class="acctsplit">${acctPerks()}<div class="acctside">${VIEWS.signup(arg)}</div></div>` : VIEWS[view](arg);
   d.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => openAcct(b.dataset.go)));
   d.querySelectorAll("[data-close]").forEach((b) => (b.onclick = () => d.close()));
@@ -415,6 +441,7 @@ function acctInit() {
   Acct.sb.auth.onAuthStateChange((event, session) => {
     const before = Acct.user && Acct.user.id;
     Acct.user = session ? session.user : null;
+    if (Acct.user) try { localStorage.setItem("ir-member", "1"); } catch (e) {}
     if (event === "PASSWORD_RECOVERY") {
       handled = true;
       setTimeout(() => openAcct("password", "reset"), 0);
@@ -426,6 +453,7 @@ function acctInit() {
   });
   Acct.sb.auth.getSession().then(({ data }) => {
     Acct.user = data.session ? data.session.user : null;
+    if (Acct.user) try { localStorage.setItem("ir-member", "1"); } catch (e) {}
     acctBar();
     Acct.known = true; // now we know whether someone is signed in
     if (!Acct.user && hashParts()[0] === "account" && !flag && !urlErr) renderAccount(); // shows the log-in popup

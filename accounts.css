@@ -437,3 +437,16 @@ input:autofill{background:var(--bg)!important;color:var(--ink)!important}
 @media (max-width:760px){.hubgrid{grid-template-columns:minmax(0,1fr)}}
 .hubset .setcol>.setrow:first-child,.hubset .setcol>.setfield:first-child{border-top-left-radius:12px;border-top-right-radius:12px}
 .hubset .setcol>.setrow:only-child,.hubset .setcol>.setfield:only-child{border-radius:12px;border-bottom-width:1px}
+
+/* Sign-up invite for new visitors: the red perks panel on its own, with big buttons */
+#acctdlg.acctinvite{max-width:460px;padding:0;overflow:hidden;border:0}
+#acctdlg.acctinvite .acctx{color:#fff;z-index:2}
+#acctdlg.acctinvite .acctperks{border:0;padding:34px 30px 28px;animation:invin .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes invin{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.perkcta{position:relative;z-index:1;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.perkgo{border:0;border-radius:12px;padding:14px 18px;font:700 1rem var(--sans);background:#fff;color:var(--scrub);cursor:pointer;box-shadow:0 10px 22px -10px rgba(0,0,0,.5);transition:transform .15s,box-shadow .15s}
+.perkgo:hover{transform:translateY(-2px);box-shadow:0 14px 26px -10px rgba(0,0,0,.55)}
+.perklater{border:1px solid rgba(255,255,255,.55);border-radius:12px;padding:11px 18px;font:600 .95rem var(--sans);background:transparent;color:#fff;cursor:pointer}
+.perklater:hover{background:rgba(255,255,255,.12)}
+.perkfine{margin:2px 0 0;font-size:.82rem;color:rgba(255,255,255,.85);text-align:center}
+.perkfine button{border:0;background:0 0;padding:0;font:inherit;font-weight:700;color:#fff;text-decoration:underline;cursor:pointer}
