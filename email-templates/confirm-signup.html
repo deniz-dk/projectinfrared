@@ -1,24 +1,31 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Confirm your email</title></head>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><title>Confirm your account</title></head>
 <body style="margin:0;padding:0;background:#f4f4f5;">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">One click and your account is ready.</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:32px 12px;">
 <tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #dddde1;border-radius:14px;overflow:hidden;">
-<tr><td style="height:4px;background:#c8102e;font-size:0;line-height:0;">&nbsp;</td></tr>
-<tr><td style="padding:28px 32px 8px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #dddde1;border-radius:16px;overflow:hidden;font-family:'Public Sans',Helvetica,Arial,sans-serif;color:#141416;">
+<tr><td style="background:#0b0b0d;padding:22px 28px;">
 <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-<td style="width:34px;height:34px;border:2.5px solid #c8102e;border-radius:50%;text-align:center;vertical-align:middle;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:700;font-size:15px;color:#c8102e;">iR</td>
-<td style="padding-left:10px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:700;font-size:18px;color:#141416;">Project Infrared</td>
+<td style="vertical-align:middle;"><img src="https://projectinfrared.org/icon-192.png" width="36" height="36" alt="" style="display:block;border:0;border-radius:9px;"></td>
+<td style="vertical-align:middle;padding-left:12px;font-family:'Archivo Narrow','Arial Narrow',Arial,sans-serif;font-weight:800;font-size:19px;letter-spacing:0.5px;text-transform:uppercase;color:#ffffff;">Project Infrared</td>
 </tr></table>
 </td></tr>
-<tr><td style="padding:16px 32px 0;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:24px;line-height:1.25;font-weight:700;color:#141416;">Confirm your email</td></tr>
-<tr><td style="padding:12px 32px 0;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#3a3c42;">Thanks for signing up. Confirm this address and your account is ready: your quiz results, favorites, notes and tiers will follow you to any device.</td></tr>
-<tr><td style="padding:24px 32px 8px;">
-<a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#c8102e;color:#ffffff;text-decoration:none;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:700;font-size:15px;padding:13px 24px;border-radius:8px;">Confirm my email</a>
+<tr><td style="padding:30px 28px 8px;">
+<p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#c8102e;">Welcome</p>
+<h1 style="margin:0 0 14px;font-family:'Archivo Narrow','Arial Narrow',Arial,sans-serif;font-weight:800;font-size:30px;line-height:1.05;text-transform:uppercase;color:#141416;">Confirm your email</h1>
+<p style="margin:0 0 24px;font-size:16px;line-height:1.55;color:#3d4047;">Thanks for signing up. Confirm your email to save your favorites, notes, quiz results and residency prep to your account.</p>
+<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:#c8102e;box-shadow:0 3px 8px rgba(200,16,46,0.32);">
+<a href="{{ .SiteURL }}/?token_hash={{ .TokenHash }}&amp;type=signup" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">Confirm my email</a>
+</td></tr></table>
+<p style="margin:24px 0 8px;font-size:14px;line-height:1.5;color:#3d4047;">Or type this code on the sign-up screen:</p>
+<p style="margin:0;font-family:Menlo,Consolas,'Courier New',monospace;font-size:28px;font-weight:700;letter-spacing:6px;color:#141416;">{{ .Token }}</p>
+<p style="margin:22px 0 0;font-size:13px;line-height:1.5;color:#5e6168;">If the button doesn’t work, paste this link into your browser:<br><a href="{{ .SiteURL }}/?token_hash={{ .TokenHash }}&amp;type=signup" style="color:#1f5f9e;word-break:break-all;">{{ .SiteURL }}/?token_hash={{ .TokenHash }}&amp;type=signup</a></p>
+<p style="margin:12px 0 0;font-size:13px;line-height:1.5;color:#5e6168;">The link and code work once and expire after an hour.</p>
 </td></tr>
-<tr><td style="padding:12px 32px 28px;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:1.55;color:#5e6168;">This link works once and expires in an hour. If you didn’t create an account, you can ignore this email.<br><br>Button not working? Paste this link into your browser:<br><a href="{{ .ConfirmationURL }}" style="color:#c8102e;word-break:break-all;">{{ .ConfirmationURL }}</a></td></tr>
-<tr><td style="padding:16px 32px;border-top:1px solid #eeeef0;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.5;color:#8a8c93;">Project Infrared · Helping medical students see in the dark.<br><a href="{{ .SiteURL }}" style="color:#8a8c93;">projectinfrared.org</a></td></tr>
+<tr><td style="padding:22px 28px 26px;">
+<p style="margin:0;padding-top:16px;border-top:1px solid #ececef;font-size:12px;line-height:1.5;color:#8a8d94;">You’re getting this because someone signed up with this address. If it wasn’t you, ignore this email.<br>Project Infrared · <a href="https://projectinfrared.org" style="color:#8a8d94;">projectinfrared.org</a></p>
+</td></tr>
 </table>
 </td></tr></table>
 </body></html>

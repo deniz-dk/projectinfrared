@@ -170,6 +170,12 @@ const VIEWS = {
     <label class="acctf"><span>Page</span><input id="a_page" type="text" maxlength="200"></label>
     <label class="acctf"><span>Message</span><textarea id="a_msg" rows="6" minlength="5" maxlength="4000" required placeholder="What’s wrong, and what should it say? A link to a source helps."></textarea></label>
     <p class="accterr" role="alert"></p><button class="btn acctgo" type="submit">Send</button></form>`,
+  verify: (email) => `<h2 id="accttitle">Check your email</h2><p class="acctnote">We sent an email to <b>${acctEsc(email)}</b>. Tap <b>Confirm my email</b> in it, or type the code from the email here. Check spam if it isn’t there.</p>
+    <form data-f="verify" data-email="${acctEsc(email)}"><label class="acctf"><span>Code from the email</span><input id="a_code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,12}" maxlength="12" required></label>
+    <p class="accterr" role="alert"></p><button class="btn acctgo" type="submit">Confirm</button></form>
+    <p class="acctalt"><button type="button" data-resend>Send a new email</button> · <button type="button" data-go="signup">Use a different email</button></p>`,
+  confirmlink: () => `<h2 id="accttitle">Confirm your email</h2><p class="acctnote">One more tap and your account is ready.</p>
+    <form data-f="confirmlink"><p class="accterr" role="alert"></p><button class="btn acctgo" type="submit">Confirm my email</button></form>`,
   msg: (t) => `<h2 id="accttitle">${t[0]}</h2><p class="acctnote">${t[1]}</p><button type="button" class="btn acctgo" data-close>OK</button>`,
 };
 /* Left panel of the sign-up dialog: what an account unlocks */
@@ -201,6 +207,17 @@ function openAcct(view, arg) {
   d.querySelector(".acctbody").innerHTML = view === "signup" ? `<div class="acctsplit">${acctPerks()}<div class="acctside">${VIEWS.signup(arg)}</div></div>` : VIEWS[view](arg);
   d.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => openAcct(b.dataset.go)));
   d.querySelectorAll("[data-close]").forEach((b) => (b.onclick = () => d.close()));
+  d.querySelectorAll("[data-resend]").forEach(
+    (b) =>
+      (b.onclick = async () => {
+        const vf = d.querySelector('form[data-f="verify"]'), err = vf && vf.querySelector(".accterr");
+        if (!vf) return;
+        b.disabled = true;
+        const { error } = await Acct.sb.auth.resend({ type: "signup", email: vf.dataset.email, options: { emailRedirectTo: acctHome() + "?confirmed=1" } });
+        if (err) err.textContent = error ? errText(error) : "Sent. Use the newest email; older codes stop working.";
+        setTimeout(() => (b.disabled = false), 30000);
+      }),
+  );
   d.querySelectorAll(".pwshow").forEach(
     (b) =>
       (b.onclick = () => {
@@ -248,6 +265,7 @@ if (window.visualViewport) {
 const ERRS = [
   [/invalid login credentials/i, "That email and password don’t match. Check both, or reset your password."],
   [/email not confirmed/i, "Confirm your email first: open the link we sent you. Check spam if it isn’t there."],
+  [/otp_expired|token has expired|expired or is invalid|invalid.*(otp|token)|link is invalid/i, "That code or link has expired or was already used. Send yourself a new email and use the newest one."],
   [/rate limit|too many|security purposes/i, "Too many tries. Wait a minute and try again."],
   [/password should be|weak/i, "Choose a stronger password: at least 8 characters, ideally a short phrase."],
   [/same.*password|different from the old/i, "Your new password has to be different from the old one."],
@@ -279,7 +297,19 @@ async function submitAcct(kind, f) {
       const { data, error } = await Acct.sb.auth.signUp({ email, password: v("a_pw"), options: { emailRedirectTo: acctHome() + "?confirmed=1", data: consent } });
       if (error) throw error;
       if (data.session) acctDialog().close();
-      else openAcct("msg", ["Check your email", `We sent a confirmation link to <b>${acctEsc(email)}</b>. Open it to finish creating your account, then you’ll be signed in. If you already have an account with this email, log in instead.`]);
+      else openAcct("verify", email);
+    } else if (kind === "verify") {
+      const token = v("a_code").replace(/\D/g, "");
+      if (token.length < 6) throw new Error("Type the code from the email (6 digits).");
+      const { error } = await Acct.sb.auth.verifyOtp({ email: f.dataset.email, token, type: "signup" });
+      if (error) throw error;
+      openAcct("msg", ["You’re in", "Your email is confirmed and you’re signed in. Save specialties with the star button and they’ll follow you to any device."]);
+    } else if (kind === "confirmlink") {
+      const q = new URLSearchParams(location.search);
+      const { error } = await Acct.sb.auth.verifyOtp({ token_hash: q.get("token_hash"), type: q.get("type") || "signup" });
+      try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+      if (error) return openAcct("msg", ["That link didn’t work", "It has expired or was already used. Try logging in: if your email is confirmed, you’re all set. If not, sign up again with the same email to get a new code."]);
+      openAcct("msg", ["You’re in", "Your email is confirmed and you’re signed in. Save specialties with the star button and they’ll follow you to any device."]);
     } else if (kind === "forgot") {
       const email = v("a_email").trim();
       const { error } = await Acct.sb.auth.resetPasswordForEmail(email, { redirectTo: acctHome() + "?reset=1" });
@@ -374,7 +404,8 @@ function acctInit() {
 
   // Links that come back from emails: ?confirmed=1, ?reset=1, or ?error=…
   const q = new URLSearchParams(location.search);
-  const flag = q.get("reset") ? "reset" : q.get("confirmed") ? "confirmed" : null;
+  const tokenHash = q.get("token_hash");
+  const flag = tokenHash ? null : q.get("reset") ? "reset" : q.get("confirmed") ? "confirmed" : null;
   const urlErr = q.get("error_description") || new URLSearchParams(location.hash.slice(1)).get("error_description");
   let handled = false;
   const cleanUrl = () => {
@@ -398,7 +429,10 @@ function acctInit() {
     acctBar();
     Acct.known = true; // now we know whether someone is signed in
     if (!Acct.user && hashParts()[0] === "account" && !flag && !urlErr) renderAccount(); // shows the log-in popup
-    if (urlErr) {
+    if (tokenHash) {
+      if (Acct.user) { cleanUrl(); openAcct("msg", ["You’re signed in", "Your email is already confirmed."]); }
+      else openAcct("confirmlink");
+    } else if (urlErr) {
       openAcct("msg", ["That link didn’t work", acctEsc(urlErr.replace(/\+/g, " ")) + ". Links expire after an hour and work once; request a new one if you need to."]);
     } else if (flag === "reset" && !handled) {
       if (Acct.user) openAcct("password", "reset");

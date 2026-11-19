@@ -16,9 +16,12 @@
 <h1 style="margin:0 0 14px;font-family:'Archivo Narrow','Arial Narrow',Arial,sans-serif;font-weight:800;font-size:30px;line-height:1.05;text-transform:uppercase;color:#141416;">Confirm your email</h1>
 <p style="margin:0 0 24px;font-size:16px;line-height:1.55;color:#3d4047;">Thanks for signing up. Confirm your email to save your favorites, notes, quiz results and residency prep to your account.</p>
 <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius:10px;background:#c8102e;box-shadow:0 3px 8px rgba(200,16,46,0.32);">
-<a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">Confirm my email</a>
+<a href="{{ .SiteURL }}/?token_hash={{ .TokenHash }}&amp;type=signup" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">Confirm my email</a>
 </td></tr></table>
-<p style="margin:22px 0 0;font-size:13px;line-height:1.5;color:#5e6168;">If the button doesn’t work, paste this link into your browser:<br><a href="{{ .ConfirmationURL }}" style="color:#1f5f9e;word-break:break-all;">{{ .ConfirmationURL }}</a></p>
+<p style="margin:24px 0 8px;font-size:14px;line-height:1.5;color:#3d4047;">Or type this code on the sign-up screen:</p>
+<p style="margin:0;font-family:Menlo,Consolas,'Courier New',monospace;font-size:28px;font-weight:700;letter-spacing:6px;color:#141416;">{{ .Token }}</p>
+<p style="margin:22px 0 0;font-size:13px;line-height:1.5;color:#5e6168;">If the button doesn’t work, paste this link into your browser:<br><a href="{{ .SiteURL }}/?token_hash={{ .TokenHash }}&amp;type=signup" style="color:#1f5f9e;word-break:break-all;">{{ .SiteURL }}/?token_hash={{ .TokenHash }}&amp;type=signup</a></p>
+<p style="margin:12px 0 0;font-size:13px;line-height:1.5;color:#5e6168;">The link and code work once and expire after an hour.</p>
 </td></tr>
 <tr><td style="padding:22px 28px 26px;">
 <p style="margin:0;padding-top:16px;border-top:1px solid #ececef;font-size:12px;line-height:1.5;color:#8a8d94;">You’re getting this because someone signed up with this address. If it wasn’t you, ignore this email.<br>Project Infrared · <a href="https://projectinfrared.org" style="color:#8a8d94;">projectinfrared.org</a></p>
