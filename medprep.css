@@ -76,3 +76,30 @@
 .mstools .ptool.on{background:var(--red-fill);color:#fff;border-color:transparent;box-shadow:var(--red-glow)}
 .medmini.mspage{margin:6px 0 16px}
 .medmini.mspage li{grid-template-columns:130px minmax(0,1fr)}
+/* School page charts */
+.msw{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:8px 0}
+.mswf{margin:0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.mswf figcaption,.mstr figcaption{font-weight:700;font-size:.92rem;margin-bottom:10px}
+.mswbar{display:flex;gap:2px;height:30px;border-radius:6px;overflow:hidden}
+.mswbar i{display:flex;align-items:center;justify-content:center;min-width:4px}
+.mswbar b{color:#fff;font-size:.78rem;font-weight:700}
+.mswleg{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;color:var(--muted)}
+.mswleg li{display:flex;align-items:center;gap:6px}.mswleg li i{width:10px;height:10px;border-radius:3px}
+.mswleg b{color:var(--ink)}
+.mswf .note{margin:8px 0 0}
+.mstrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.mstr{margin:0;padding:14px 16px 6px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.mstr svg{width:100%;height:auto;overflow:visible}
+.msax{stroke:var(--line);stroke-width:1}
+.msln{fill:none;stroke:#c8102e;stroke-width:2}
+.msln.fc{stroke-dasharray:5 5;opacity:.7}
+.mspt circle{fill:#c8102e;stroke:var(--surface);stroke-width:2}
+.mspt.fc circle{fill:var(--surface);stroke:#c8102e}
+.mspt circle.hit{fill:transparent;stroke:none;cursor:default}
+.mspt text{font:600 11px var(--sans);fill:var(--ink)}
+.mspt text.msyr{fill:var(--muted);font-weight:500}
+.mspt.fc text{fill:var(--muted)}
+.msch{list-style:none;padding:0;margin:6px 0 14px;display:flex;flex-direction:column;gap:10px}
+.msch li{line-height:1.5}.msch .tag{margin-right:8px}
+.msct{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-right:8px;vertical-align:1px;background:var(--scrub-soft);color:var(--scrub)}
+.msct.k-changed{background:#2563a8;color:#fff}.msct.k-rumour{background:#d08a12;color:#fff}.msct.k-official{background:var(--scrub-soft);color:var(--scrub)}

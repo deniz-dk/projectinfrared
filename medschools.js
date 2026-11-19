@@ -101,10 +101,10 @@ const MSD = {
     lede: "One of Canada’s oldest medical schools and one of its smallest classes in Kingston, known for close teaching and a tight community. Queen’s also runs a family-medicine-focused MD with Lakeridge Health in Durham Region.",
     r: [2, 4, 3, 3, 3, 3],
     about: "Queen’s admits about 114 students to its Kingston campus and 20 to the Queen’s-Lakeridge Health MD Family Medicine program in Durham, plus military seats. It also runs QuARMS, an accelerated route for a few high-school students. Clinical training is at Kingston Health Sciences Centre and regional hospitals across southeastern Ontario.",
-    good: ["Small class: faculty know your name", "Walkable, student-centred city", "Strong mentorship and early clinical contact", "MDFM option guarantees a family medicine path", "Collaborative rather than competitive"],
-    bad: ["Smaller patient volume and fewer subspecialties than Toronto or Ottawa", "Kingston housing near campus is tight", "Needs both MCAT and Casper", "MDFM students in Durham are far from the Kingston community"],
+    good: ["Lottery gives anyone above the thresholds a real shot", "Small class: faculty know your name", "Walkable, student-centred city", "Strong mentorship and early clinical contact", "MDFM option guarantees a family medicine path", "Collaborative rather than competitive"],
+    bad: ["The lottery means a 4.0 and a 520 don’t improve your odds over someone at the threshold", "Smaller patient volume and fewer subspecialties than Toronto or Ottawa", "Kingston housing near campus is tight", "Needs both MCAT and Casper"],
     st: [["Applications (class of 2025)", "5,781"], ["Interviews", "513"], ["Average accepted GPA", "3.81"], ["Average accepted MCAT", "511"], ["From Ontario", "82%"], ["Master’s or PhD", "35%"]],
-    adm: { who: "Canadian citizens and permanent residents (plus a small number of international seats).", gpa: "Minimum cumulative GPA of 3.0 to apply; the committee sets the cut-off each cycle. Queen’s reviews your cumulative GPA.", tests: "MCAT required, written within five years. Casper required.", select: "GPA, MCAT and Casper cut-offs, then file review of the Autobiographical Sketch and references. Virtual MMI and panel interviews, January to March. Offers go out from a ranked list and roll after the first round.", extra: ["MDFM: apply separately in OMSAS if you know you want family medicine.", "Indigenous Student Admissions Pathway with at least four seats."] },
+    adm: { who: "Canadian citizens and permanent residents (plus a small number of international seats).", gpa: "Cumulative GPA, threshold 3.0. Above the threshold, a higher GPA gives no advantage.", tests: "MCAT total of at least 500 with 125 or more in every section. Casper required (its threshold isn’t published).", select: "Since 2025 Queen’s uses a lottery: everyone above the GPA, MCAT and Casper thresholds who applies on time enters a random draw (QARS) for an internal MMI evaluation, with 90% of spots for Ontario residents. Those who pass go on to file review and a virtual panel interview (February to March), and offers come from the ranked list.", extra: ["8% of internal MMI spots are reserved for fee-waiver applicants not picked in the main draw.", "MDFM: apply separately in OMSAS if you know you want family medicine.", "Indigenous Student Admissions Pathway with at least four seats."] },
     prog: { str: "Two pre-clerkship years, then clerkship. About 81 weeks of clerkship including electives and selectives.", sites: "Kingston, plus the Queen’s-Lakeridge Health MDFM campus in Durham Region.", feat: ["Small-group and team-based learning", "MD Family Medicine six-year combined MD and residency track", "QuARMS early-admission route"] },
     tu: [["Domestic students", "$23,983 + about $1,820 in fees"]], tuyear: "2026–27",
     life: "Kingston rents are moderate but student housing near campus fills early.",
@@ -322,10 +322,64 @@ const MSD = {
     src: [["SFU financial resources", "https://www.sfu.ca/medicine/admissions/financial-resources.html"], ["SFU 2026 admission statistics", "https://www.sfu.ca/medicine/admissions/fall-2026-admission-statistics.html"], ["SFU key dates", "https://www.sfu.ca/medicine/admissions/how-to-apply/key-dates.html"]],
   },
 };
+/* Extra admissions detail. w: published weightings [title, [[part, %], ...], note]. tr: yearly series [title, [[year, value], ...], fmt, max].
+   ch: what's changed or being talked about [tag, text]; tag is "Official", "Changed", "Rumour" or "Forecast". fc: our forecast for this cycle and next. */
+const MSX = {
+  uoft: { tr: [["Applications, by entering year", [["2019", 3553], ["2020", 3940], ["2021", 4319], ["2022", 4302], ["2023", 4263], ["2024", 4290], ["2025", 4722], ["2026", 4870]], 0], ["Average accepted GPA, by entering year", [["2019", 3.96], ["2020", 3.95], ["2021", 3.96], ["2022", 3.94], ["2023", 3.93], ["2024", 3.95], ["2025", 3.94], ["2026", 3.95]], 2, 4]],
+    ch: [["Changed", "Weighted GPA (dropping your lowest courses) was discontinued from the 2022–23 cycle, so every course now counts."], ["Official", "A fifth academy, in Scarborough, opens to students entering in fall 2027, which may add seats."]],
+    fc: "Expect applications around 5,000 and an accepted GPA near 3.95 for 2027 and 2028 entry. The MCAT minimum (125 per section, one 124 allowed) has been stable." },
+  mac: { w: [["Who gets an interview", [["GPA", 32], ["MCAT CARS", 32], ["Casper", 32], ["Grad degree bonus (up to)", 4]]], ["Who gets an offer", [["Interview (MMI)", 70], ["GPA", 15], ["MCAT CARS", 15]], "Casper only counts for the interview stage."]],
+    tr: [["Mean CARS of admitted class, by graduating class", [["2022", 129], ["2026", 129], ["2027", 129]], 0, 132]],
+    ch: [["Official", "About 570 applicants are invited to the virtual MMI each year."]],
+    fc: "The formula has been stable for years. Expect a mean CARS around 129 and the minimum to stay at 123." },
+  western: { tr: [["Applications, by graduating class", [["2027", 2635], ["2028", 2611], ["2029", 3623], ["2030", 3813]], 0], ["Interviews, by graduating class", [["2027", 454], ["2028", 464], ["2029", 696], ["2030", 699]], 0], ["Average GPA in best year, by graduating class", [["2027", 3.93], ["2028", 3.95], ["2029", 3.96], ["2030", 3.96]], 2, 4], ["Average CARS, by graduating class", [["2027", 128], ["2028", 127], ["2029", 127], ["2030", 127]], 0, 132]],
+    ch: [["Changed", "Since the 2024–25 cycle you can apply during third year of a four-year degree, which is why applications jumped about 40% for the class of 2029."], ["Official", "2025–26 MCAT minimums: 126 in every section (125 through an application pathway). Minimum GPA 3.70 in each of your two best years."], ["Changed", "A Black Applicant Pathway was added alongside the Access and Indigenous pathways."], ["Rumour", "Western’s dental school is moving to cumulative GPA instead of the two best years, and students on r/premedcanada expect medicine may follow. Western’s medicine pages still say two best years."]],
+    fc: "Applications should stay near 3,800–4,000 with about 700 interviews. MCAT minimums have crept up and could reach 126–127 per section. If medicine follows dentistry to cumulative GPA, applicants with a weak first year lose their biggest advantage at Western." },
+  queens: {
+    ch: [["Changed", "From the 2025 entering class, Queen’s replaced ranking by GPA and MCAT with a random draw among applicants above the thresholds (GPA 3.0, MCAT 500 with 125 per section, plus Casper)."], ["Official", "90% of internal MMI spots go to Ontario residents; 8% are held for fee-waiver applicants."]],
+    fc: "Under the lottery, published thresholds matter more than averages. Expect the GPA and MCAT thresholds to stay where they are; the Casper threshold isn’t published and can move." },
+  ottawa: { ch: [["Official", "Ottawa no longer uses Casper and is moving to an asynchronous MMI shared with other Ontario schools."], ["Official", "2026 cycle: 5,920 applications, 621 interviews, 189 admitted."]],
+    fc: "Expect around 6,000 applications. The GPA screen (three most recent full years) has historically needed about 3.9 or higher to get an interview." },
+  nosm: { w: [["Who gets an interview", [["GPA", 50], ["Context score", 50]], "Context: northern, rural, Indigenous and Francophone background."]],
+    tr: [["Applications, by entering class", [["2023", 1692], ["2026", 2516]], 0], ["Interviews, by entering class", [["2023", 332], ["2026", 317]], 0]],
+    ch: [["Official", "About 300–350 top-ranked applicants are interviewed."]],
+    fc: "Applications have grown much faster than interview spots. Expect over 2,500 applications and roughly the same number of interviews, so context score matters even more." },
+  tmu: { tr: [["Applications, by graduating class", [["2029", 6400], ["2030", 6015]], 0]],
+    ch: [["Official", "First class graduates in 2029, so the first CaRMS results come that spring."], ["Official", "Minimum OMSAS GPA of 3.5; about 10% of applicants reach the MMI."]],
+    fc: "Applications settled near 6,000 after the opening year. Expect similar for 2027 and 2028 entry." },
+  mcgill: { w: [["Med-P pre-selection (CEGEP)", [["R score", 70], ["Casper", 20], ["CV", 10]]], ["Final selection", [["MMI", 100]]]],
+    ch: [["Official", "For fall 2026, 5 of 328 applicants from other provinces were admitted."], ["Official", "Last Casper dates for fall 2027: October 15 (English) or October 22 (French) for the MDCM, February 18 for Med-P."]],
+    fc: "Out-of-province seats are fixed at about five. Expect the Quebec university interview minimum to stay at a 3.5 GPA and the Med-P minimum at an R score of 33." },
+  udem: { w: [["Pre-selection (CEGEP)", [["R score", 60], ["Casper", 40]]], ["Final selection", [["MEM interview", 100]]]], fc: "Minimum R score of 33 to be considered; expect it to hold." },
+  laval: { w: [["Pre-selection (CEGEP)", [["Casper", 100]]], ["Final selection", [["MEM interview", 100]]]], fc: "Laval pre-selects CEGEP applicants on Casper alone above a minimum R score of 33; expect that to hold." },
+  sherb: { w: [["Pre-selection (CEGEP)", [["R score", 70], ["Casper", 30]]], ["Final selection", [["MEM interview", 60], ["R score", 40]]]], fc: "Minimum R score of 32; the last candidates invited to the MEM have been around 32.5–33." },
+  mun: { ch: [["Official", "Tuition for medical students has stayed at $14,250 since 2023–24, and Newfoundland and Labrador froze per-credit rates again for 2026–27."], ["Official", "Recent admitted NL and PEI applicants averaged 125–127 per MCAT section, with Casper usually in the third quartile or higher."]], fc: "Expect tuition to stay flat and the class at about 110." },
+  ualberta: { w: [["Final ranking", [["Personal activities", 35], ["Interview (MMI)", 35], ["Cumulative GPA", 30]], "The MCAT is a pass/fail threshold and isn’t weighted; references are read but not scored."]],
+    ch: [["Changed", "Out-of-province seats drop from 15% to 10% starting with the 2027–28 cycle."], ["Changed", "A full course load is no longer required, and Alberta applicants now declare residency on Launchpad."]],
+    fc: "Non-Albertans: expect an even tighter pool from the 2027–28 cycle." },
+  ucalgary: { w: [["Final score", [["File review", 50], ["Interview (MMI)", 50]], "File review weighs academic and non-academic parts equally."]],
+    ch0: 1,
+    ch: [["Official", "2024–25: 1,964 complete applications (1,534 Albertan, 430 non-Albertan). Non-Albertans needed a higher composite score to be interviewed (107.5 vs 103.0)."], ["Official", "Applicants receiving offers in 2024–25 averaged a 3.88 GPA and 127.4 CARS (Albertans) and 3.95 and 129.1 (non-Albertans)."]],
+    fc: "Expect the same pattern: non-Albertans need about a 3.95 GPA and 129 CARS to be competitive." },
+  ubc: { tr: [["Applicants", [["2022", 2830], ["2023", 2815], ["2024", 2915]], 0], ["Average MCAT", [["2022", 514.6], ["2023", 514.2], ["2024", 513.2]], 1, 528], ["Average GPA (%)", [["2022", 88.4], ["2023", 88.8], ["2024", 88.9]], 1, 100]],
+    ch: [["Changed", "In-person MMIs return this cycle."], ["Changed", "A new structured format for non-academic activity entries started with the 2026–27 application."], ["Official", "Prerequisites change: from the 2027–28 cycle, courses must be done by April 30 of the year you apply."]],
+    fc: "Applicants have hovered around 2,800–2,900 with the class steady at 328. Expect an average MCAT near 513 and admission rates around 11%." },
+  usask: { ch: [["Official", "The province is funding 20 new seats in 2026–27 and targeting 95% of admissions for Saskatchewan students."], ["Changed", "From the 2027 cycle, the Coursera Indigenous Canada and Cultural Humility certificates no longer meet the Indigenous studies prerequisite."]], fc: "More seats but a stronger Saskatchewan preference: better odds for residents, worse for everyone else." },
+  sfu: { tr: [["Class size", [["2026", 48], ["2027", 64]], 0]], ch: [["Official", "First cycle (2026 entry): 1,864 applications, 205 interviews, 48 admitted."], ["Official", "GPA and MCAT above the threshold give no extra advantage."]], fc: "The class grows to 64 in 2027 and should keep growing; applications will likely rise as the school becomes known." },
+};
 // McGill Med-P shares McGill's page
 const msdOf = (id) => (MSD[id] && MSD[id].alias ? MSD[MSD[id].alias] : MSD[id]);
 const msdId = (id) => (MSD[id] && MSD[id].alias ? MSD[id].alias : id);
-const MS_RATE = ["Odds of getting in", "Affordability", "Research", "Clinical variety", "City and student life", "Breathing room"];
+const MS_RATE = ["Odds of getting in", "Affordability", "Research", "Clinical variety", "Student life", "Time off"];
+if (typeof TIPS === "object")
+  Object.assign(TIPS, {
+    "Odds of getting in": "How realistic a seat is: first-year seats per applicant, plus residency rules. Schools that save almost every seat for their own province score low for most out-of-province applicants. 5 = best odds.",
+    Affordability: "Tuition plus typical rent in the school’s city over the whole program. 5 = cheapest.",
+    Research: "How easy it is to get involved in research: size of the research enterprise, labs and institutes, and how often students publish.",
+    "Clinical variety": "Range of patients, hospitals and subspecialties you can rotate through, from community clinics to quaternary centres.",
+    "Student life": "What life outside class is like: the city, the class culture, and how much there is to do on a night or weekend off.",
+    "Time off": "How much breathing room the program gives you: summers off, vacation and pace. Three-year, year-round programs (McMaster, Calgary, SFU) score lowest.",
+  });
 const msMoney = (n) => "$" + Math.round(n).toLocaleString("en-CA");
 
 function renderSchool(id) {
@@ -383,7 +437,7 @@ function renderSchool(id) {
 const msSrc = (d) => `<p class="srcs">Sources: ${d.src.concat([CMES, AFMC27]).filter((x, i, a) => a.findIndex((y) => y[1] === x[1]) === i).map(([t, u]) => `<a class="src" href="${u}" target="_blank" rel="noopener">${acctEsc(t)} ↗</a>`).join(" · ")}</p>`;
 function msOverview(s, d) {
   return `<div class="rgrid">${MS_RATE.map((l, i) => `<div class="rcard">${rateBar(l, d.r[i])}</div>`).join("")}</div>
-  <p class="note">Ratings compare each school against the others on this site; higher is better for you. Odds reflect seats per applicant and residency rules. <span class="tag e">Estimate</span></p>
+  <p class="note">Ratings compare each school against the others on this site; higher is better for you. Hover or tap a rating for what it means. <span class="tag e">Estimate</span></p>
   <div class="split plain"><section><h3>The school</h3><p>${d.about}</p></section><section><h3>Who gets in</h3><p>${acctEsc(s.who)}</p></section></div>
   <div class="split"><div class="box good"><h3>What students like</h3>${bl(d.good)}</div><div class="box bad"><h3>What students complain about</h3>${bl(d.bad)}</div></div>
   <p class="note">Drawn from what students and applicants commonly say in forums and school materials, not a survey. <span class="tag e">Estimate</span></p>
@@ -399,11 +453,62 @@ function msAdmissions(s, d, id) {
   <h3>Tests</h3><p>${a.tests}</p>
   <h3>How they choose</h3><p>${a.select}</p>
   ${a.extra && a.extra.length ? `<h3>Also know</h3>${bl(a.extra)}` : ""}
+  ${msExtra(id)}
   <h2>Dates for the ${MED_CYCLES[cyc].split(" · ")[0]}</h2>
   ${cyc !== MED_BASE ? `<p class="note">Expected dates, based on last cycle, until ${acctEsc(s.short)} posts the new ones.</p>` : ""}
   <ol class="medmini mspage">${evs.map((e) => `<li class="${medPast(e) ? "past" : ""}"><span>${medDate(e, { month: "short", day: "numeric", year: "numeric" })}</span><b>${acctEsc(e.t)}</b></li>`).join("")}</ol>
   <div class="callout"><b>Before you apply:</b> confirm every requirement on <a href="${s.url}" target="_blank" rel="noopener">${acctEsc(s.short)}’s admissions site ↗</a>. Schools change cut-offs and pieces each cycle.</div>
   ${msSrc(d)}`;
+}
+const MSC = ["#c8102e", "#2563a8", "#d08a12", "#2f8f6b", "#7a4fb0"];
+function msWeights(w) {
+  return `<div class="msw">${w
+    .map(([t, parts, note]) => `<figure class="mswf"><figcaption>${t}</figcaption><div class="mswbar" role="img" aria-label="${acctEsc(parts.map(([l, v]) => l + " " + v + "%").join(", "))}">${parts.map(([l, v], i) => `<i style="flex:${v};background:${MSC[i % 5]}" title="${acctEsc(l)}: ${v}%"><b>${v >= 12 ? v + "%" : ""}</b></i>`).join("")}</div>
+    <ul class="mswleg">${parts.map(([l, v], i) => `<li><i style="background:${MSC[i % 5]}"></i>${acctEsc(l)} <b>${v}%</b></li>`).join("")}</ul>${note ? `<p class="note">${note}</p>` : ""}</figure>`)
+    .join("")}</div>`;
+}
+// Forecast the next two years from the recent trend (half the average yearly change, capped at the scale maximum)
+function msForecast(pts, dp, max) {
+  const yrs = pts.map((p) => +p[0]);
+  if (pts.length < 2 || yrs.some(isNaN)) return [];
+  const a = pts[pts.length - 2], b = pts[pts.length - 1];
+  const step = ((b[1] - a[1]) / (+b[0] - +a[0])) * 0.5;
+  const out = [];
+  for (let k = 1; k <= 2; k++) {
+    let v = b[1] + step * k;
+    if (max) v = Math.min(max, v);
+    out.push([String(+b[0] + k), +v.toFixed(dp)]);
+  }
+  return out;
+}
+function msTrend([t, pts, dp, max]) {
+  const fc = msForecast(pts, dp, max);
+  const all = pts.concat(fc);
+  const vals = all.map((p) => p[1]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = (hi - lo || Math.abs(hi) * 0.05 || 1) * 0.25;
+  lo -= pad;
+  hi += pad;
+  const W = 520, H = 170, L = 8, Rr = 8, T = 22, B = 26;
+  const x = (i) => L + (all.length === 1 ? (W - L - Rr) / 2 : (i * (W - L - Rr)) / (all.length - 1));
+  const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+  const f = (v) => (dp ? v.toFixed(dp) : Math.round(v).toLocaleString("en-CA"));
+  const line = (arr, off) => arr.map((p, i) => `${i ? "L" : "M"}${x(i + off).toFixed(1)},${y(p[1]).toFixed(1)}`).join("");
+  const fcPath = fc.length ? `M${x(pts.length - 1).toFixed(1)},${y(pts[pts.length - 1][1]).toFixed(1)}` + fc.map((p, i) => `L${x(pts.length + i).toFixed(1)},${y(p[1]).toFixed(1)}`).join("") : "";
+  return `<figure class="mstr"><figcaption>${t}</figcaption><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${acctEsc(t)}: ${all.map((p, i) => p[0] + " " + f(p[1]) + (i >= pts.length ? " (forecast)" : "")).join(", ")}">
+    <line x1="${L}" x2="${W - Rr}" y1="${H - B}" y2="${H - B}" class="msax"/>
+    ${pts.length > 1 ? `<path d="${line(pts, 0)}" class="msln"/>` : ""}${fcPath ? `<path d="${fcPath}" class="msln fc"/>` : ""}
+    ${all.map((p, i) => { const isF = i >= pts.length; return `<g class="mspt${isF ? " fc" : ""}"><circle cx="${x(i)}" cy="${y(p[1])}" r="5"/><circle cx="${x(i)}" cy="${y(p[1])}" r="14" class="hit"><title>${p[0]}: ${f(p[1])}${isF ? " (forecast)" : ""}</title></circle>${i === 0 || i === pts.length - 1 || isF || all.length <= 5 ? `<text x="${x(i)}" y="${y(p[1]) - 10}" text-anchor="middle">${f(p[1])}</text>` : ""}<text x="${x(i)}" y="${H - 8}" text-anchor="middle" class="msyr">${p[0]}</text></g>`; }).join("")}
+  </svg></figure>`;
+}
+const MS_TAG = { Official: "s", Changed: "s", Rumour: "f", Forecast: "f" };
+function msExtra(id) {
+  const x = MSX[msdId(id)];
+  if (!x) return "";
+  return `${x.w ? `<h2>How they score you</h2>${msWeights(x.w)}<p class="note">From the school’s published selection formula. <span class="tag s">Sourced</span></p>` : ""}
+  ${x.tr ? `<h2>Trends</h2><div class="mstrs">${x.tr.map(msTrend).join("")}</div><p class="note">Solid line: published figures. Dashed: our projection for the next two years from the recent trend. <span class="tag f">Forecast</span></p>` : ""}
+  ${x.ch && x.ch.length ? `<h2>What’s changing</h2><ul class="msch">${x.ch.map(([tag, txt]) => `<li><span class="msct k-${tag.toLowerCase()}">${tag}</span>${txt}</li>`).join("")}</ul>` : ""}
+  ${x.fc ? `<div class="callout"><b>Our read on this cycle and next:</b> ${x.fc} <span class="tag f">Forecast</span></div>` : ""}`;
 }
 function msProgram(s, d) {
   const p = d.prog;
