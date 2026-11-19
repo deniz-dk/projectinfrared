@@ -8,7 +8,7 @@ const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SE
 const SECRET = Deno.env.get("NEWS_SECRET")!;
 // Page keys, generated from the site's data by build.py
 const NAMES: Record<string, string> = /*NAMES*/ {};
-const KINDS = ["trend", "policy", "match", "pay", "jobs", "opportunity", "research", "news"];
+const KINDS = ["tech", "politics", "business", "trend", "policy", "match", "pay", "jobs", "opportunity", "research", "news"];
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const https = (v: unknown) => {

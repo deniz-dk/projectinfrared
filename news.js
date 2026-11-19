@@ -3,9 +3,12 @@
    - My News in the profile: the same, for the specialties you've starred.
    Stories live in Supabase (news_items, site_updates, news_sweeps), added each week by the news check. */
 const NEWS = { items: [], upd: [], sweep: null, ready: false, off: false };
-const NEWS_KIND = { trend: "Trend", policy: "Policy", match: "Match", pay: "Pay", jobs: "Jobs", opportunity: "Opportunity", research: "Research", news: "News" };
+const NEWS_KIND = { trend: "Trend", tech: "Technology", politics: "Politics", business: "Business & tax", policy: "Policy", match: "Match", pay: "Pay", jobs: "Jobs", opportunity: "Opportunity", research: "Research", news: "News" };
 // Line icons for stories without a photo: each kind gets its own cover
 const NEWS_ICO = {
+  tech: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/>',
+  politics: '<path d="M4 21V4M4 4h12l-2 4 2 4H4"/>',
+  business: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   policy: '<path d="M3 21h18M5 21V10m4 11V10m6 11V10m4 11V10M2 10l10-6 10 6z"/>',
   match: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
   pay: '<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/>',
@@ -133,7 +136,10 @@ function myNewsCard(preview) {
     const f = favs.find((k) => (specs || []).includes(k)) || favs.find((k) => nTouches(specs, k));
     return f ? nName(f) : "";
   };
-  const items = NEWS.items.filter((x) => favs.some((k) => nTouches(x.specs, k)));
+  // Stories for your favorites, plus the broad ones tagged for everyone (politics, tax, technology and so on)
+  const itemsAll = NEWS.items.filter((x) => !(x.specs || []).length || favs.some((k) => nTouches(x.specs, k)));
+  const F = NEWS_F;
+  const items = preview ? itemsAll : itemsAll.filter((x) => (!F.kinds.size || F.kinds.has(x.kind)) && (!F.specs.size || (F.specs.has("_all") && !(x.specs || []).length) || [...F.specs].some((k) => k !== "_all" && nTouches(x.specs, k))));
   const since = Date.now() - 45 * 864e5;
   const chg = NEWS.upd.filter((u) => u.kind === "data" && new Date(u.day + "T12:00:00") >= since && favs.some((k) => nTouches(u.specs, k)));
   const quiet = favs.filter((k) => !items.some((x) => nTouches(x.specs, k)));
@@ -144,11 +150,28 @@ function myNewsCard(preview) {
     ${chg.length ? newsChanges(chg.slice(0, 2), (u) => tagOf(u.specs)) : ""}</section>`;
   }
   const first = items.slice(0, 6), rest = items.slice(6, 30);
-  return `<section class="hubcard hubwide hubnews">${head}<p class="hubsub">${newsChecked()}Stories and page changes for your ${favs.length} favorite${favs.length === 1 ? "" : "s"}. The best of each week also comes in your Sunday newsletter.</p>
-    ${items.length ? `<div class="ngrid">${first.map((x) => newsCard(x, tagOf(x.specs))).join("")}</div>${rest.length ? `<details class="nmore"><summary>${rest.length} more ${rest.length === 1 ? "story" : "stories"}</summary><div class="ngrid">${rest.map((x) => newsCard(x, tagOf(x.specs))).join("")}</div></details>` : ""}` : `<div class="hubempty">No stories for your favorites yet. ${NEWS.sweep ? "We check every week." : "The first weekly check hasn’t run yet."}</div>`}
+  const kindsHere = Object.keys(NEWS_KIND).filter((k) => itemsAll.some((x) => x.kind === k));
+  const chip = (attr, val, label, on) => `<button type="button" class="nfchip${on ? " on" : ""}" ${attr}="${nEsc(val)}" aria-pressed="${on}">${label}</button>`;
+  const filters = `<div class="nfilters">
+    <div class="nfrow"><span class="nflab">Topics</span>${chip("data-nfk", "", "All", !F.kinds.size)}${kindsHere.map((k) => chip("data-nfk", k, `<i class="nfdot k-${k}"></i>${NEWS_KIND[k]}`, F.kinds.has(k))).join("")}</div>
+    <div class="nfrow"><span class="nflab">Specialties</span>${chip("data-nfs", "", "All", !F.specs.size)}${chip("data-nfs", "_all", "Across medicine", F.specs.has("_all"))}${favs.map((k) => chip("data-nfs", k, nEsc(nName(k)), F.specs.has(k))).join("")}</div></div>`;
+  return `<section class="hubcard hubwide hubnews">${head}<p class="hubsub">${newsChecked()}Stories and page changes for your ${favs.length} favorite${favs.length === 1 ? "" : "s"}, plus news that matters across medicine. The best of each week also comes in your Sunday newsletter.</p>${filters}
+    ${items.length ? `<div class="ngrid">${first.map((x) => newsCard(x, tagOf(x.specs))).join("")}</div>${rest.length ? `<details class="nmore"><summary>${rest.length} more ${rest.length === 1 ? "story" : "stories"}</summary><div class="ngrid">${rest.map((x) => newsCard(x, tagOf(x.specs))).join("")}</div></details>` : ""}` : `<div class="hubempty">${F.kinds.size || F.specs.size ? "No stories match these filters." : `No stories for your favorites yet. ${NEWS.sweep ? "We check every week." : "The first weekly check hasn’t run yet."}`}</div>`}
     ${chg.length ? `<h3 class="nsub">Changed on their pages</h3>${newsChanges(chg, (u) => tagOf(u.specs))}` : ""}
     ${quiet.length && items.length ? `<p class="hubsub nquiet">No news yet for ${quiet.slice(0, 4).map((k) => `<a href="#${nEsc(k)}/news">${nEsc(nName(k))}</a>`).join(", ")}${quiet.length > 4 ? ` and ${quiet.length - 4} more` : ""}.</p>` : ""}
   </section>`;
 }
+
+// My News filters (kept for this visit): pick topics and favorites; none picked means all
+const NEWS_F = { kinds: new Set(), specs: new Set() };
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-nfk],[data-nfs]");
+  if (!b) return;
+  const set = b.hasAttribute("data-nfk") ? NEWS_F.kinds : NEWS_F.specs;
+  const v = b.getAttribute(b.hasAttribute("data-nfk") ? "data-nfk" : "data-nfs");
+  if (!v) set.clear();
+  else set.has(v) ? set.delete(v) : set.add(v);
+  newsRefresh();
+});
 
 newsLoad();

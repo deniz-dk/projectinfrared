@@ -138,6 +138,9 @@ const pageHref = (k: string) => {
 const short = (k: string) => (NAMES[k] || k).replace(/ \(.*\)$/, "");
 const KIND: Record<string, [string, string]> = {
   trend: ["Trend", "#ff8a4c"],
+  tech: ["Technology", "#4f9bff"],
+  politics: ["Politics", "#a07ae6"],
+  business: ["Business & tax", "#3ecf8e"],
   policy: ["Policy", "#6fb1ff"], match: ["Match", "#ff5a6a"], pay: ["Pay", "#3ecf8e"], jobs: ["Jobs", "#f5b942"],
   opportunity: ["Opportunity", "#c69bff"], research: ["Research", "#4dd4d4"], news: ["News", "#a4a6ad"],
 };
@@ -259,7 +262,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
       return sectionHead(NAMES[f], cnt) + `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${changesHtml(ch)}${st.map((x) => storyHtml(x)).join("")}${pageBtn(pageHref(f), all.length > 3 ? `See all ${all.length} on the page →` : `Read more on the page →`)}</table></td></tr>`;
     })
     .join("");
-  const top = W.news.filter((x) => x.top && !used.has(x.id)).slice(0, favs.length ? 3 : 5);
+  const top = W.news.filter((x) => (x.top || !(x.specs || []).length) && !used.has(x.id)).sort((a, b) => Number(b.top) - Number(a.top)).slice(0, favs.length ? 4 : 6); // big stories and news for all of medicine
   const site = N.news ? W.upd.filter((u) => u.kind === "site") : [];
   if (!blocks && !top.length && !site.length) return null;
 
