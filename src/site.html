@@ -11976,7 +11976,7 @@ function buildNav() {
       const b = document.createElement("button");
       b.className = "navitem";
       b.dataset.id = k;
-      b.innerHTML = `<span>${L.name}${L.parent ? `<span class="navsub">${L.parent}</span>` : ""}</span>${L.tier ? tierDots(L.tier) : ""}`;
+      b.innerHTML = `<span>${L.name}${L.parent ? `<span class="navsub">${L.parent}</span>` : ""}</span>${L.tier ? tierDots(L.tier, k) : ""}`;
       b.onclick = () => go(k);
       nav.appendChild(b);
     });
