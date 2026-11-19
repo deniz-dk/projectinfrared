@@ -112,7 +112,7 @@ function newsTab(key, parent) {
     }`;
   };
   const name = nName(key);
-  return `<p class="nlede">${newsChecked()}Each week we check CaRMS, the colleges, the OMA, specialty societies, hospitals and the news for anything that affects ${nEsc(name)}: match and training changes, pay and fee updates, jobs, policy and opportunities. Summaries are ours; follow each link for the full story.</p>
+  return `${NEWS.sweep ? `<p class="nlede">${newsChecked().trim()}</p>` : ""}
   <h3>Top stories</h3>${own.length ? list(own, subTag) : `<div class="nempty">No ${nEsc(name)} stories yet. ${NEWS.sweep ? "Nothing new turned up in recent checks." : "The first weekly check hasn’t run yet."}</div>`}
   ${more.length ? `<h3>More ${nEsc(nName(parent))} news</h3>${list(more)}` : ""}
   <h3>Changes on this page</h3>${chg.length ? newsChanges(chg) : `<div class="nempty">No changes to this page have been logged yet.</div>`}`;

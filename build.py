@@ -11,10 +11,10 @@ def rep(a, b):
     global s
     if s.count(a) != 1: sys.exit(f'build: expected one match for {a[:60]!r}, found {s.count(a)}')
     s = s.replace(a, b)
-js = (HERE / 'accounts.js').read_text(encoding='utf-8') + '\n' + (HERE / 'accounts-hub.js').read_text(encoding='utf-8') + '\n' + (HERE / 'prep.js').read_text(encoding='utf-8') + '\nacctInit();\n' + (HERE / 'news.js').read_text(encoding='utf-8') + '\n'
+js = (HERE / 'accounts.js').read_text(encoding='utf-8') + '\n' + (HERE / 'accounts-hub.js').read_text(encoding='utf-8') + '\n' + (HERE / 'prep.js').read_text(encoding='utf-8') + '\n' + (HERE / 'medprep.js').read_text(encoding='utf-8') + '\nacctInit();\n' + (HERE / 'news.js').read_text(encoding='utf-8') + '\n'
 for k, v in CFG.items(): js = js.replace(k, v)
 rep('<link rel="preconnect" href="https://fonts.googleapis.com">', '<link rel="manifest" href="/site.webmanifest">\n<link rel="preconnect" href="https://fonts.googleapis.com">')
-rep('</style>\n</head>', (HERE / 'accounts.css').read_text(encoding='utf-8') + (HERE / 'prep.css').read_text(encoding='utf-8') + (HERE / 'news.css').read_text(encoding='utf-8') + '</style>\n' + LIB + '\n</head>')
+rep('</style>\n</head>', (HERE / 'accounts.css').read_text(encoding='utf-8') + (HERE / 'prep.css').read_text(encoding='utf-8') + (HERE / 'medprep.css').read_text(encoding='utf-8') + (HERE / 'news.css').read_text(encoding='utf-8') + '</style>\n' + LIB + '\n</head>')
 rep('setNavH();\nalignHours();\nsetIncomeStars();\nbuildNav();\nrender();',
     'setNavH();\nalignHours();\nsetIncomeStars();\nbuildNav();\nrender();\n' + js)
 # Wording that changes once accounts exist

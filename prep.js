@@ -70,8 +70,13 @@ function prepState() {
   P.progs = Array.isArray(P.progs) ? P.progs.filter((p) => prepProg(p.k)) : [];
   P.rank = Array.isArray(P.rank) ? P.rank.filter((k) => P.progs.some((p) => p.k === k)) : [];
   if (P.remind == null) P.remind = true;
+  // The old "Preparing for CaRMS" switch is gone. Anyone who had switched it off keeps CaRMS emails off.
+  if (P.applying === false && P.stage !== "Pre-med" && !P.applyMoved) P.remind = false;
+  P.applyMoved = 1;
+  P.applying = P.stage !== "Pre-med"; // the tab you see follows Where you are; keeps CaRMS emails in step
   return P;
 }
+const isPremed = () => prepState().stage === "Pre-med";
 function prepSave() {
   acctPush();
 }

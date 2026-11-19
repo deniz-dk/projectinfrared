@@ -150,11 +150,12 @@ function renderAccount() {
   const legacy = Acct.legacy ? `<div class="hubwarn"><b>One setup step left:</b> run <code>setup2-account-hub.sql</code> in Supabase to turn on usernames, top picks, notes, quiz results and report tracking. Your favorites and tiers already save.</div>` : "";
 
   // --- tabs, like the specialty pages
-  const applying = prepState().applying !== false;
+  // What you're preparing for decides the prep tab: pre-meds get Med school prep, everyone else gets Residency (CaRMS)
+  const premed = isPremed();
   const news = typeof myNewsCard === "function";
   const TABS = [
-    ["Overview", () => `${applying ? prepCard() : ""}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
-    ["Residency", () => residencyCards()],
+    ["Overview", () => `${premed ? medCard() : prepCard()}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
+    premed ? ["Med school", () => medSchoolCards()] : ["Residency", () => residencyCards()],
     news ? ["News", () => myNewsCard()] : null,
     ["Notifications", () => emailCard()],
     ["Settings", () => `${youCard()}${repCard}${secCard}`],
@@ -190,6 +191,7 @@ function renderAccount() {
   );
   wireSettings(main);
   if (main.querySelector(".prepintab")) wirePrep(prepState());
+  if (main.querySelector(".medintab")) wireMed();
   main.querySelectorAll("[data-hub-logout]").forEach((lo) => (lo.onclick = () => acctLogout()));
   wireHub();
   if (typeof addSiteFoot === "function") addSiteFoot();
@@ -400,7 +402,7 @@ function prepCard() {
   return `<a class="hubcard hubwide hubprep" href="#account/residency" data-gotab="residency"><span class="hpl"><span class="prepkick">Residency prep · ${P.year} match</span><b>${next ? next.t : "Plan your match"}</b><small>${next ? prepFmt(next.d, { weekday: "short", month: "short", day: "numeric" }) + " · " : ""}${n} program${n === 1 ? "" : "s"} tracked</small></span>${next ? `<span class="hpc"><b>${days <= 0 ? "Today" : days}</b><small>${days <= 0 ? "" : days === 1 ? "day" : "days"}</small></span>` : ""}<span class="btn hpgo">Open →</span></a>`;
 }
 
-/* Settings: where you are in training, whether you're preparing for CaRMS, and which emails you get */
+/* Settings: where you are in training (this picks the Residency or Med school tab) and which emails you get */
 const STAGES = ["Pre-med", "Medical school, year 1", "Medical school, year 2", "Medical school, year 3", "Medical school, year 4", "Resident", "Other"];
 // Email consent: nothing is sent unless the member turned email on (at sign-up or here).
 function emailOn() {
@@ -412,21 +414,19 @@ function emailOn() {
 const hubSw = (key, on, label, sub, off) => `<label class="setrow${off ? " setoff" : ""}"><span><b>${label}</b><small>${sub}</small></span><span class="prepswitch"><input type="checkbox" data-set="${key}"${on ? " checked" : ""}${off ? " disabled" : ""}><span aria-hidden="true"></span><span class="sr">${label}</span></span></label>`;
 function youCard() {
   const P = prepState();
-  const applying = P.applying !== false;
   return `<section class="hubcard hubwide hubset"><h2>${hsvg("sliders")}You</h2>
   <div class="setgrid"><div class="setcol">
-    <label class="setfield"><span>Where you are</span><select data-set="stage"><option value="">Choose</option>${STAGES.map((x) => `<option${P.stage === x ? " selected" : ""}>${x}</option>`).join("")}</select></label>
-    ${applying ? `<label class="setfield"><span>Match year</span><select data-set="year">${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label>` : ""}</div>
-  <div class="setcol">${hubSw("applying", applying, "Preparing for CaRMS", "Shows your residency prep page, countdown and Residency tab")}</div></div></section>`;
+    <label class="setfield"><span>Where you are</span><select data-set="stage"><option value="">Choose</option>${STAGES.map((x) => `<option${P.stage === x ? " selected" : ""}>${x}</option>`).join("")}</select></label></div>
+  <div class="setcol">${isPremed() ? `<p class="hubsub">Pre-meds get the Med school tab for applying to Canadian medical schools. Pick a medical school year or Resident to get the Residency tab for CaRMS instead.</p>` : `<label class="setfield"><span>Match year</span><select data-set="year">${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label>`}</div></div></section>`;
 }
 function emailCard() {
   const P = prepState();
   const N = P.notify;
-  const on = emailOn(), applying = P.applying !== false;
+  const on = emailOn(), applying = !isPremed();
   return `<section class="hubcard hubwide hubset hubmail2"><h2>${hsvg("chat")}Email notifications</h2>
   <div class="setmaster">${hubSw("email", on, "Email me from Project Infrared", on ? "Choose what you get below. Every email has a one-click unsubscribe link." : "Off: we won’t email you anything except account emails like password resets.")}</div>
   <div class="setkids${on ? "" : " dim"}">
-    ${hubSw("remind", on && applying && P.remind !== false, "CaRMS deadline reminders", applying ? "A week before and the day before each deadline, and the day before interviews you’ve saved" : "Turn on Preparing for CaRMS in Settings first", !on || !applying)}
+    ${hubSw("remind", on && applying && P.remind !== false, "CaRMS deadline reminders", applying ? "A week before and the day before each deadline, and the day before interviews you’ve saved" : "For medical students applying to residency. Change Where you are in Settings if that’s you", !on || !applying)}
     ${hubSw("changes", on && N.changes !== false, "Sunday newsletter", "Sunday mornings: news, opportunities and page changes for the specialties you’ve starred", !on)}
     ${on && N.changes !== false ? nlPicker(N) : ""}
     ${hubSw("news", on && !!N.news, "Site news", "New features and big data updates, a few times a year", !on)}
@@ -447,9 +447,6 @@ function emailNudge() {
   return `<a class="hubcard hubwide hubnudge" href="#account/notifications" data-gotab="notifications"><span><b>Get your Sunday newsletter</b><small>News for your favorite specialties and CaRMS deadline reminders, by email. Off until you turn it on.</small></span><span class="btn">Turn on</span></a>`;
 }
 function residencyCards() {
-  const P = prepState();
-  if (P.applying === false)
-    return `<section class="hubcard hubwide"><h2>${hsvg("compass")}Residency prep</h2><div class="hubempty">Turn on <b>Preparing for CaRMS</b> in Settings to get a match timeline, checklist, program tracker and draft rank list.</div><a class="tbtn" href="#account/settings" data-gotab="settings">Open Settings</a></section>`;
   return `<div class="hubwide hubprepfull">${renderPrep(true)}</div>`;
 }
 function wireSettings(main) {
@@ -467,9 +464,8 @@ function wireSettings(main) {
       const k = el.dataset.set, v = el.type === "checkbox" ? el.checked : el.value;
       if (k === "stage") {
         P.stage = v;
-        if (P.applying == null) P.applying = /year (3|4)/.test(v);
-      } else if (k === "applying") P.applying = v;
-      else if (k === "year") P.year = +v;
+        P.applying = v !== "Pre-med"; // CaRMS reminder emails go to everyone except pre-meds
+      } else if (k === "year") P.year = +v;
       else if (k === "remind") P.remind = v;
       else if (k === "email") {
         P.notify.email = v;
@@ -490,5 +486,5 @@ function wireSettings(main) {
       }),
   );
   const r = main.querySelector('[data-set="remind"]');
-  if (r && P.applying === false) r.disabled = true;
+  if (r && isPremed()) r.disabled = true;
 }
