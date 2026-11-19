@@ -128,7 +128,6 @@ async function runReminders() {
 }
 
 /* ---------- Sunday newsletter ---------- */
-// Page names, generated from the site's data by build.py. Keys match the site's favorites: "obgyn", "sub-obgyn-2".
 // Page names come from the live site (projectinfrared.org/names.json, written by build.py), so they always match it
 let NAMES: Record<string, string> = {};
 async function loadNames() {
@@ -256,7 +255,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
   const wantT: string[] = Array.isArray(N.topics) ? N.topics : [];
   const wantS: string[] = Array.isArray(N.specs) ? N.specs : [];
   const okKind = (k: string) => !wantT.length || wantT.includes(k);
-  const allFavs = (Array.isArray(r.shortlist) ? r.shortlist : []).filter((k) => NAMES[k]);
+  const allFavs = (Array.isArray(r.shortlist) ? r.shortlist : []).filter((k) => !Object.keys(NAMES).length || NAMES[k]);
   const favs = wantS.filter((k) => k !== "_all").length ? allFavs.filter((k) => wantS.includes(k)) : wantS.length ? [] : allFavs;
   W = { news: W.news.filter((x) => okKind(x.kind)), upd: W.upd };
   const used = new Set<string>();
@@ -273,7 +272,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
       nChanges += ch.length;
       withNews.push(short(f));
       const cnt = [all.length ? `${all.length} ${all.length === 1 ? "story" : "stories"}` : "", ch.length ? `${ch.length} page ${ch.length === 1 ? "change" : "changes"}` : ""].filter(Boolean).join(" · ");
-      return sectionHead(NAMES[f], cnt) + `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${changesHtml(ch)}${st.map((x) => storyHtml(x)).join("")}${pageBtn(pageHref(f), all.length > 3 ? `See all ${all.length} on the page →` : `Read more on the page →`)}</table></td></tr>`;
+      return sectionHead(NAMES[f] || f, cnt) + `<tr><td class="x-pad" style="padding:0 28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${changesHtml(ch)}${st.map((x) => storyHtml(x)).join("")}${pageBtn(pageHref(f), all.length > 3 ? `See all ${all.length} on the page →` : `Read more on the page →`)}</table></td></tr>`;
     })
     .join("");
   const top = (wantS.length && !wantS.includes("_all") ? [] : W.news).filter((x) => (x.top || !(x.specs || []).length) && !used.has(x.id)).sort((a, b) => Number(b.top) - Number(a.top)).slice(0, favs.length ? 4 : 6); // big stories and news for all of medicine
