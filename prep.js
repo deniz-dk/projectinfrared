@@ -70,13 +70,16 @@ function prepState() {
   P.progs = Array.isArray(P.progs) ? P.progs.filter((p) => prepProg(p.k)) : [];
   P.rank = Array.isArray(P.rank) ? P.rank.filter((k) => P.progs.some((p) => p.k === k)) : [];
   if (P.remind == null) P.remind = true;
-  // The old "Preparing for CaRMS" switch is gone. Anyone who had switched it off keeps CaRMS emails off.
-  if (P.applying === false && P.stage !== "Pre-med" && !P.applyMoved) P.remind = false;
-  P.applyMoved = 1;
-  P.applying = P.stage !== "Pre-med"; // the tab you see follows Where you are; keeps CaRMS emails in step
+  // Preparing for CaRMS (med students, residents) and preparing for med school (pre-meds) are separate switches.
+  // CaRMS defaults off in years 1 and 2, and stays off for anyone who had switched the old CaRMS switch off.
+  if (P.carms == null) P.carms = P.applying === false && P.applyMoved !== 1 ? false : !/year (1|2)$/.test(P.stage || "");
+  if (P.medprep == null) P.medprep = true;
+  P.applyMoved = 2;
+  P.applying = P.stage !== "Pre-med" && P.carms; // CaRMS reminder emails follow this
   return P;
 }
 const isPremed = () => prepState().stage === "Pre-med";
+const prepOn = () => (isPremed() ? prepState().medprep : prepState().carms); // show the prep tab and card?
 function prepSave() {
   acctPush();
 }

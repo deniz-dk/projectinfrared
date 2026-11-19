@@ -154,8 +154,8 @@ function renderAccount() {
   const premed = isPremed();
   const news = typeof myNewsCard === "function";
   const TABS = [
-    ["Overview", () => `${premed ? medCard() : prepCard()}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
-    premed ? ["Med school", () => medSchoolCards()] : ["Residency", () => residencyCards()],
+    ["Overview", () => `${prepOn() ? (premed ? medCard() : prepCard()) : ""}${topCard}${quizCard}${slCard}${tierCard}${news ? myNewsCard(3) : ""}`],
+    prepOn() ? (premed ? ["Med school", () => medSchoolCards()] : ["Residency", () => residencyCards()]) : null,
     news ? ["News", () => myNewsCard()] : null,
     ["Notifications", () => emailCard()],
     ["Settings", () => `${youCard()}${repCard}${secCard}`],
@@ -417,16 +417,18 @@ function youCard() {
   return `<section class="hubcard hubwide hubset"><h2>${hsvg("sliders")}You</h2>
   <div class="setgrid"><div class="setcol">
     <label class="setfield"><span>Where you are</span><select data-set="stage"><option value="">Choose</option>${STAGES.map((x) => `<option${P.stage === x ? " selected" : ""}>${x}</option>`).join("")}</select></label></div>
-  <div class="setcol">${isPremed() ? `<p class="hubsub">Pre-meds get the Med school tab for applying to Canadian medical schools. Pick a medical school year or Resident to get the Residency tab for CaRMS instead.</p>` : `<label class="setfield"><span>Match year</span><select data-set="year">${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label>`}</div></div></section>`;
+  <div class="setcol">${isPremed()
+    ? hubSw("medprep", P.medprep, "Preparing for med school", "Shows the Med school tab: Canadian school deadlines, your school list and checklist")
+    : `${hubSw("carms", P.carms, "Preparing for CaRMS", "Shows the Residency tab: match timeline, countdown, programs and rank list")}${P.carms ? `<label class="setfield"><span>Match year</span><select data-set="year">${Object.keys(PREP_TL).map((y) => `<option value="${y}"${+y === P.year ? " selected" : ""}>${y} R-1</option>`).join("")}</select></label>` : ""}`}</div></div></section>`;
 }
 function emailCard() {
   const P = prepState();
   const N = P.notify;
-  const on = emailOn(), applying = !isPremed();
+  const on = emailOn(), applying = !isPremed() && P.carms;
   return `<section class="hubcard hubwide hubset hubmail2"><h2>${hsvg("chat")}Email notifications</h2>
   <div class="setmaster">${hubSw("email", on, "Email me from Project Infrared", on ? "Choose what you get below. Every email has a one-click unsubscribe link." : "Off: we won’t email you anything except account emails like password resets.")}</div>
   <div class="setkids${on ? "" : " dim"}">
-    ${hubSw("remind", on && applying && P.remind !== false, "CaRMS deadline reminders", applying ? "A week before and the day before each deadline, and the day before interviews you’ve saved" : "For medical students applying to residency. Change Where you are in Settings if that’s you", !on || !applying)}
+    ${hubSw("remind", on && applying && P.remind !== false, "CaRMS deadline reminders", applying ? "A week before and the day before each deadline, and the day before interviews you’ve saved" : "Turn on Preparing for CaRMS in Settings first", !on || !applying)}
     ${hubSw("changes", on && N.changes !== false, "Sunday newsletter", "Sunday mornings: news, opportunities and page changes for the specialties you’ve starred", !on)}
     ${on && N.changes !== false ? nlPicker(N) : ""}
     ${hubSw("news", on && !!N.news, "Site news", "New features and big data updates, a few times a year", !on)}
@@ -464,8 +466,8 @@ function wireSettings(main) {
       const k = el.dataset.set, v = el.type === "checkbox" ? el.checked : el.value;
       if (k === "stage") {
         P.stage = v;
-        P.applying = v !== "Pre-med"; // CaRMS reminder emails go to everyone except pre-meds
-      } else if (k === "year") P.year = +v;
+      } else if (k === "carms" || k === "medprep") P[k] = v;
+      else if (k === "year") P.year = +v;
       else if (k === "remind") P.remind = v;
       else if (k === "email") {
         P.notify.email = v;
@@ -486,5 +488,5 @@ function wireSettings(main) {
       }),
   );
   const r = main.querySelector('[data-set="remind"]');
-  if (r && isPremed()) r.disabled = true;
+  if (r && (isPremed() || !P.carms)) r.disabled = true;
 }
