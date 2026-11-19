@@ -129,7 +129,15 @@ async function runReminders() {
 
 /* ---------- Sunday newsletter ---------- */
 // Page names, generated from the site's data by build.py. Keys match the site's favorites: "obgyn", "sub-obgyn-2".
-const NAMES: Record<string, string> = /*NAMES*/ {};
+// Page names come from the live site (projectinfrared.org/names.json, written by build.py), so they always match it
+let NAMES: Record<string, string> = {};
+async function loadNames() {
+  if (Object.keys(NAMES).length) return;
+  try {
+    const r = await fetch(`${SITE}/names.json`);
+    if (r.ok) NAMES = await r.json();
+  } catch (_e) { /* fall back to page keys */ }
+}
 const baseOf = (k: string) => (/^sub-([a-z]+)-\d+$/.exec(k) || [, k])[1] as string;
 const pageHref = (k: string) => {
   const m = /^sub-([a-z]+)-(\d+)$/.exec(k);
@@ -298,6 +306,7 @@ function buildWeekly(r: Row, W: { news: News[]; upd: Upd[] }) {
 }
 
 async function runWeekly(onlyEmail?: string) {
+  await loadNames();
   const W = await weekData();
   const key = "weekly-" + torontoDay();
   const { data: rows, error } = await sb.from("user_prefs").select("user_id, prep, email_token, shortlist, username");

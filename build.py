@@ -32,10 +32,9 @@ for n in ['og-image.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'
 # The email function needs the site's page names: write them into the copy-paste version of the function
 import subprocess
 names = subprocess.run(['node', '-e', '''const fs=require("fs");const s=fs.readFileSync(process.argv[1],"utf8");const a=s.indexOf("const S = [");const b=s.indexOf("\\n];\\n",a);const S=eval(s.slice(a+10,b+3));const o={};for(const x of S){o[x.id]=x.name;(x.subs||[]).forEach((y,i)=>o["sub-"+x.id+"-"+i]=y.name+" ("+x.name+")");}process.stdout.write(JSON.stringify(o));''', str(SRC)], capture_output=True, text=True, check=True).stdout
+(out / 'names.json').write_text(names, encoding='utf-8')  # page names for the email functions
 for fname, outname in [('notify', 'notify-function.txt'), ('news-publish', 'news-publish-function.txt')]:
-    fn = (HERE / 'emails' / fname / 'index.ts').read_text(encoding='utf-8')
-    if fn.count('/*NAMES*/ {}') != 1: sys.exit(f'build: NAMES placeholder missing in {fname}/index.ts')
-    (HERE / 'emails' / outname).write_text(fn.replace('/*NAMES*/ {}', names), encoding='utf-8')
+    (HERE / 'emails' / outname).write_text((HERE / 'emails' / fname / 'index.ts').read_text(encoding='utf-8'), encoding='utf-8')
 print('built', out / 'index.html', len(s))
 
 # Which commit this build came from (projectinfrared.org/version.txt), to confirm Netlify deploys pushes

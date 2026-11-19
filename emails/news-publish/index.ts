@@ -6,8 +6,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const SECRET = Deno.env.get("NEWS_SECRET")!;
-// Page keys, generated from the site's data by build.py
-const NAMES: Record<string, string> = /*NAMES*/ {};
+// Page keys look like "obgyn" or "sub-obgyn-2"
+const KEY = /^(sub-[a-z]+-\d{1,2}|[a-z]{2,20})$/;
 const KINDS = ["tech", "politics", "business", "trend", "policy", "match", "pay", "jobs", "opportunity", "research", "news"];
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
@@ -20,7 +20,7 @@ const https = (v: unknown) => {
   }
 };
 const day = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(Date.parse(v)) ? v : "");
-const keys = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter((k) => typeof k === "string" && NAMES[k]))].slice(0, 12) : []);
+const keys = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter((k) => typeof k === "string" && KEY.test(k)))].slice(0, 12) : []);
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("POST only", { status: 405 });
