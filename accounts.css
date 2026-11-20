@@ -461,3 +461,7 @@ input:autofill{background:var(--bg)!important;color:var(--ink)!important}
 .setkids .setrow:has(+ .nlpick){border-bottom:0;padding-bottom:0}
 .setkids .nlpick{margin:11px 0 0 18px}
 .setkids .nlpick + .setrow{border-top:1px solid var(--line);margin-top:11px}
+
+/* Profile banner and account dot: red to a hint of hot pink */
+.hubcard.hubhead{background:radial-gradient(circle at 12% 0%,rgba(255,255,255,.18),transparent 40%),radial-gradient(circle at 100% 100%,rgba(0,0,0,.32),transparent 55%),linear-gradient(120deg,#8e0b20 0%,#c8102e 42%,#e8194a 74%,#f43f7a 100%);box-shadow:0 22px 44px -26px rgba(214,22,66,.7)}
+.acctdot,.acctbar .acctdot{background:var(--ir-grad)}
